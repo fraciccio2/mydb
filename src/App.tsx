@@ -1,13 +1,15 @@
-import { Routes, Route, Link, useLocation } from 'react-router-dom'
-import Search from './pages/Search'
-import Seen from './pages/Seen'
-import Details from './pages/Details'
+import { Routes, Route, Link, useLocation } from "react-router-dom";
+import Search from "./pages/Search";
+import Seen from "./pages/Seen";
+import Details from "./pages/Details";
 
 function App() {
   const location = useLocation();
 
   const isActive = (path: string) => {
-    return location.pathname === path ? 'text-red-600 border-b-2 border-red-600' : 'text-zinc-400 hover:text-zinc-100';
+    return location.pathname === path
+      ? "text-red-600 border-b-2 border-red-600"
+      : "text-zinc-400 hover:text-zinc-100";
   };
 
   return (
@@ -17,20 +19,22 @@ function App() {
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center gap-2">
               <span className="text-2xl">🎬</span>
-              <span className="font-black text-2xl tracking-tighter text-red-600">MYDB</span>
+              <span className="font-black text-2xl tracking-tighter text-red-600">
+                MYDB
+              </span>
             </div>
             <div className="flex gap-8 h-full">
-              <Link 
-                to="/" 
-                className={`flex items-center px-1 pt-1 text-sm font-bold transition-colors ${isActive('/')}`}
+              <Link
+                to="/"
+                className={`flex items-center px-1 pt-1 text-sm font-bold transition-colors ${isActive("/")}`}
               >
-                Cerca
+                Search
               </Link>
-              <Link 
-                to="/seen" 
-                className={`flex items-center px-1 pt-1 text-sm font-bold transition-colors ${isActive('/seen')}`}
+              <Link
+                to="/seen"
+                className={`flex items-center px-1 pt-1 text-sm font-bold transition-colors ${isActive("/seen")}`}
               >
-                Visti
+                Seen
               </Link>
             </div>
           </div>
@@ -45,7 +49,7 @@ function App() {
         </Routes>
       </main>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

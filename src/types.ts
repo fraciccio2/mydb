@@ -35,59 +35,70 @@ export interface MovieDetails extends Movie {
 }
 
 export interface OmdbErrorResponse {
-  Response: "False";
   Error: string;
+  Response: "False";
 }
 
-export interface OmdbSearchResponse {
-  Response: "True" | "False";
-  Error?: string;
-  Search?: Movie[];
-  totalResults?: string;
-}
-
-export type MovieType = 'movie' | 'series' | 'game' | '';
+export type MovieType = "movie" | "series" | "game" | "";
 
 export interface WhatsOnPlatformLink {
+  link_url: string;
   name: string;
-  url: string;
 }
 
 export interface WhatsOnItem {
-  id: number;
   _id: string;
-  title: string;
-  original_title: string;
-  item_type: 'movie' | 'tvshow';
+  allocine?: WhatsOnRating;
+  episodes_details?: {
+    description: string;
+    episode: number;
+    id: string;
+    release_date: string;
+    season: number;
+    title: string;
+    url: string;
+    users_rating: number;
+    users_rating_count: number;
+  }[];
+  id: number;
   image: string;
-  release_date: string;
-  runtime: number;
+  imdb?: WhatsOnRating;
+  item_type: "movie" | "tvshow";
+  letterboxd?: WhatsOnRating;
+  metacritic?: WhatsOnRating;
+  original_title: string;
+  platforms_links?: WhatsOnPlatformLink[];
   popularity_average: number;
   ratings_average: number;
-  status?: string;
-  seasons_number?: number;
-  episodes_stats?: {
-    highest_rated?: {
-      title: string;
-      rating: number;
-      season_number: number;
-      episode_number: number;
-    };
-    lowest_rated?: {
-      title: string;
-      rating: number;
-      season_number: number;
-      episode_number: number;
-    };
+  release_date: string;
+  rotten_tomatoes?: {
+    critics_certified: boolean;
+    critics_rating: number;
+    critics_rating_count: number;
+    critics_rating_liked_count: number;
+    critics_rating_not_liked_count: number;
+    id: string;
+    url: string;
+    users_certified: boolean;
+    users_rating: number;
+    users_rating_count: number;
+    users_rating_liked_count: number;
+    users_rating_not_liked_count: number;
   };
-  imdb?: { id: string; score: number; votes: number };
-  tmdb: { id: number; score: number; votes: number };
-  rotten_tomatoes?: { score: number; votes: number };
-  metacritic?: { score: number; votes: number };
-  allocine?: { score: number; votes: number };
-  letterboxd?: { score: number; votes: number };
-  senscritique?: { score: number; votes: number };
-  platforms_links?: WhatsOnPlatformLink[];
+  runtime: number;
+  seasons_number?: number;
+  senscritique?: WhatsOnRating;
+  status?: string;
+  title: string;
+  tmdb: WhatsOnRating;
+  trailer?: string;
+}
+
+export interface WhatsOnRating {
+  id: number;
+  url: string;
+  users_rating: number;
+  users_rating_count: number;
 }
 
 export interface WhatsOnSearchResponse {
