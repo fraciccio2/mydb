@@ -3,13 +3,19 @@ import {
   MagnifyingGlassIcon,
   ChevronDownIcon,
 } from "@heroicons/react/24/outline";
-import type { WhatsOnSearchResponse, MovieType, Movie } from "../types";
+import type {
+  WhatsOnSearchResponse,
+  MovieType,
+  Movie,
+  OmdbSearchResponse,
+} from "../types";
 import MovieCard from "../components/MovieCard";
 import * as React from "react";
 
 function Search() {
   const [title, setTitle] = useState("");
   const [type, setType] = useState<MovieType>("");
+  const [genres, setGenres] = useState("");
 
   // State for movies and pagination
   const [movies, setMovies] = useState<Movie[]>([]);
@@ -19,6 +25,7 @@ function Search() {
   const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState("");
   const [isDiscovery, setIsDiscovery] = useState(true);
+  const [source, setSource] = useState<"whatson" | "omdb">("whatson");
 
   const observer = useRef<IntersectionObserver | null>(null);
 
@@ -36,52 +43,95 @@ function Search() {
 
       try {
         const apiKeyWhatsON = import.meta.env.VITE_WHATS_ON_API_KEY;
+        const apiKeyOMDB = import.meta.env.VITE_OMDB_API_KEY;
 
         const currentTitle = searchTitle !== undefined ? searchTitle : title;
-        const currentType = type === "series" ? "tvshow" : type;
+        let currentSource = isNewSearch ? "whatson" : source;
 
-        let url = `https://whatson-api.onrender.com/?page=${pageNum}&api_key=${apiKeyWhatsON}`;
-        if (currentTitle) url += `&title=${encodeURIComponent(currentTitle)}`;
-        if (currentType) url += `&item_type=${currentType}`;
+        if (isNewSearch) {
+          setSource("whatson");
+        }
 
-        const response = await fetch(url);
-        const data: WhatsOnSearchResponse = await response.json();
+        // --- Step 1: Try WhatsON if it's the current source ---
+        if (currentSource === "whatson") {
+          const currentType = type === "series" ? "tvshow" : type;
 
-        if (data.results && data.results.length > 0) {
-          const mappedMovies: Movie[] = data.results.map((item) => ({
-            Poster: item.image,
-            Title: item.title,
-            Type: item.item_type === "tvshow" ? "series" : item.item_type,
-            Year: item.release_date ? item.release_date.split("-")[0] : "N/A",
-            imdbID: item.imdb?.id.toString() || "",
-          }));
+          let url = `https://whatson-api.onrender.com/?page=${pageNum}&api_key=${apiKeyWhatsON}`;
+          if (currentTitle) url += `&title=${encodeURIComponent(currentTitle)}`;
+          if (currentType) url += `&item_type=${currentType}`;
+          if (genres) url += `&genres=${encodeURIComponent(genres)}`;
 
-          if (isNewSearch) {
-            setMovies(mappedMovies);
-            setTotalResults(data.total_results);
+          const response = await fetch(url);
+          const data: WhatsOnSearchResponse = await response.json();
+
+          if (data.results && data.results.length > 0) {
+            const mappedMovies: Movie[] = data.results.map((item) => ({
+              Poster: item.image,
+              Title: item.title,
+              Type: item.item_type === "tvshow" ? "series" : item.item_type,
+              Year: item.release_date ? item.release_date.split("-")[0] : "N/A",
+              imdbID: item.imdb?.id.toString() || "",
+            }));
+
+            if (isNewSearch) {
+              setMovies(mappedMovies);
+              setTotalResults(data.total_results);
+            } else {
+              setMovies((prev) => [...prev, ...mappedMovies]);
+            }
+            setPage(pageNum);
+            return; // Exit if results found
+          } else if (isNewSearch && currentTitle) {
+            // If new search returns no results and we have a title, fallback to OMDb
+            currentSource = "omdb";
+            setSource("omdb");
           } else {
-            setMovies((prev) => [...prev, ...mappedMovies]);
+            // No results and no fallback criteria met
+            if (isNewSearch) {
+              setError("No results found");
+              setTotalResults(0);
+            }
+            return;
           }
-          setPage(pageNum);
-        } else {
-          if (isNewSearch) {
-            setError("Nessun risultato trovato");
-            setTotalResults(0);
+        }
+
+        // --- Step 2: Try OMDb if source is omdb ---
+        if (currentSource === "omdb") {
+          let omdbUrl = `https://www.omdbapi.com/?apikey=${apiKeyOMDB}&s=${encodeURIComponent(currentTitle)}&page=${pageNum}`;
+          if (type) omdbUrl += `&type=${type}`;
+
+          const response = await fetch(omdbUrl);
+          const data: OmdbSearchResponse = await response.json();
+
+          if (data.Response === "True" && data.Search) {
+            if (isNewSearch) {
+              setMovies(data.Search);
+              setTotalResults(parseInt(data.totalResults || "0", 10));
+            } else {
+              setMovies((prev) => [...prev, ...(data.Search ?? [])]);
+            }
+            setPage(pageNum);
+          } else {
+            if (isNewSearch) {
+              setError("No results found");
+              setTotalResults(0);
+            }
           }
         }
       } catch (err) {
-        setError("Errore durante la ricerca. Riprova più tardi.");
+        setError("There was an error searching. Please try again later.");
         console.error(err);
       } finally {
         setLoading(false);
         setLoadingMore(false);
       }
     },
-    [title, type],
+    [title, type, genres, source],
   );
 
   // Discovery search on mount
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchMovies(1, true, "").catch((e) => console.error(e));
   }, []);
 
@@ -109,6 +159,7 @@ function Search() {
   const handleReset = () => {
     setTitle("");
     setType("");
+    setGenres("");
     setIsDiscovery(true);
     fetchMovies(1, true, "").catch((e) => console.error(e));
   };
@@ -135,7 +186,7 @@ function Search() {
         {/* Subtle red accent line at the top of the form */}
         <div className="absolute top-0 left-0 right-0 h-1 bg-red-600/50" />
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-6 gap-8">
           <div className="md:col-span-3">
             <label className="block text-xs font-bold uppercase tracking-widest text-zinc-400 mb-2.5 ml-1">
               Title Film / Series
@@ -148,7 +199,7 @@ function Search() {
               className="w-full bg-zinc-800 border border-zinc-700 rounded-md px-4 py-3.5 focus:ring-2 focus:ring-red-600 outline-none text-white transition-all placeholder:text-zinc-500 focus:bg-zinc-700/50"
             />
           </div>
-          <div>
+          <div className="md:col-span-1">
             <label className="block text-xs font-bold uppercase tracking-widest text-zinc-400 mb-2.5 ml-1">
               Category
             </label>
@@ -167,7 +218,38 @@ function Search() {
               </div>
             </div>
           </div>
-          <div className="md:col-span-4 flex flex-col sm:flex-row justify-end gap-4 mt-4 pt-6 border-t border-zinc-800">
+          <div className="md:col-span-2">
+            <label className="block text-xs font-bold uppercase tracking-widest text-zinc-400 mb-2.5 ml-1">
+              Genre
+            </label>
+            <div className="relative group">
+              <select
+                value={genres}
+                onChange={(e) => setGenres(e.target.value)}
+                className="w-full bg-zinc-800 border border-zinc-700 rounded-md px-4 py-3.5 focus:ring-2 focus:ring-red-600 outline-none text-white transition-all appearance-none cursor-pointer focus:bg-zinc-700/50 [&>option]:bg-zinc-800"
+              >
+                <option value="">All Genres</option>
+                <option value="Action">Action</option>
+                <option value="Adventure">Adventure</option>
+                <option value="Animation">Animation</option>
+                <option value="Comedy">Comedy</option>
+                <option value="Crime">Crime</option>
+                <option value="Documentary">Documentary</option>
+                <option value="Drama">Drama</option>
+                <option value="Family">Family</option>
+                <option value="Fantasy">Fantasy</option>
+                <option value="Horror">Horror</option>
+                <option value="Mystery">Mystery</option>
+                <option value="Romance">Romance</option>
+                <option value="Sci-Fi">Sci-Fi</option>
+                <option value="Thriller">Thriller</option>
+              </select>
+              <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-zinc-500 group-focus-within:text-red-600 transition-colors">
+                <ChevronDownIcon className="w-4 h-4" />
+              </div>
+            </div>
+          </div>
+          <div className="md:col-span-6 flex flex-col sm:flex-row justify-end gap-4 mt-4 pt-6 border-t border-zinc-800">
             <button
               type="button"
               onClick={handleReset}

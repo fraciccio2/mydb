@@ -417,11 +417,21 @@ function Details() {
                       Status
                     </span>
                     <span
-                      className={`text-sm font-black uppercase tracking-wider ${movie.whatson.status === "Ended" ? "text-zinc-400" : "text-green-500"}`}
+                      className={`text-sm font-black uppercase tracking-wider ${
+                        movie.whatson.status === "Ended"
+                          ? "text-zinc-500"
+                          : movie.whatson.status === "Canceled"
+                            ? "text-red-500"
+                            : movie.whatson.status === "Ongoing"
+                              ? "text-green-500"
+                              : "text-zinc-400"
+                      }`}
                     >
                       {movie.whatson.status === "Ended"
                         ? "Finished"
-                        : "In Progress"}
+                        : movie.whatson.status === "Ongoing"
+                          ? "In Progress"
+                          : movie.whatson.status || "Unknown"}
                     </span>
                   </div>
                 </div>

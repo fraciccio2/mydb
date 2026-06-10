@@ -39,6 +39,13 @@ export interface OmdbErrorResponse {
   Response: "False";
 }
 
+export interface OmdbSearchResponse {
+  Search?: Movie[];
+  totalResults?: string;
+  Response: "True" | "False";
+  Error?: string;
+}
+
 export type MovieType = "movie" | "series" | "game" | "";
 
 export interface WhatsOnPlatformLink {
@@ -88,7 +95,7 @@ export interface WhatsOnItem {
   runtime: number;
   seasons_number?: number;
   senscritique?: WhatsOnRating;
-  status?: string;
+  status?: "Ended" | "Canceled" | "Ongoing" | "Pilot" | "Unknown";
   title: string;
   tmdb: WhatsOnRating;
   trailer?: string;
