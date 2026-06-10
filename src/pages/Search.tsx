@@ -1,12 +1,11 @@
 import { useState, useRef, useCallback, useEffect } from 'react'
 import { MagnifyingGlassIcon, ChevronDownIcon } from '@heroicons/react/24/outline'
-import type { OmdbSearchResponse, MovieType, Movie } from '../types'
+import type { WhatsOnSearchResponse, MovieType, Movie } from '../types'
 import MovieCard from '../components/MovieCard'
 
 function Search() {
   const [title, setTitle] = useState('')
   const [type, setType] = useState<MovieType>('')
-  const [year, setYear] = useState('')
   
   // State for movies and pagination
   const [movies, setMovies] = useState<Movie[]>([])
@@ -19,10 +18,7 @@ function Search() {
 
   const observer = useRef<IntersectionObserver | null>(null)
 
-  const fetchMovies = useCallback(async (pageNum: number, isNewSearch: boolean, searchTitle?: string, searchYear?: string) => {
-    const currentTitle = searchTitle || title;
-    if (!currentTitle.trim()) return
-
+  const fetchMovies = useCallback(async (pageNum: number, isNewSearch: boolean, searchTitle?: string) => {
     if (isNewSearch) {
       setLoading(true)
       setMovies([])
@@ -34,30 +30,37 @@ function Search() {
     setError('')
 
     try {
-      const apiKey = import.meta.env.VITE_OMDB_API_KEY
-      let url = `https://www.omdbapi.com/?apikey=${apiKey}&s=${currentTitle}&page=${pageNum}`
+      const apiKeyWhatsON = import.meta.env.VITE_WHATS_ON_API_KEY
+
+      const currentTitle = searchTitle !== undefined ? searchTitle : title;
+      const currentType = type === 'series' ? 'tvshow' : type;
+
+      let url = `https://whatson-api.onrender.com/?page=${pageNum}&api_key=${apiKeyWhatsON}`
+      if (currentTitle) url += `&title=${encodeURIComponent(currentTitle)}`
+      if (currentType) url += `&item_type=${currentType}`
       
-      const currentType = isNewSearch && searchTitle ? '' : type;
-      const currentYear = searchYear || year;
-
-      if (currentType) url += `&type=${currentType}`
-      if (currentYear) url += `&y=${currentYear}`
-
       const response = await fetch(url)
-      const data: OmdbSearchResponse = await response.json()
+      const data: WhatsOnSearchResponse = await response.json()
       
-      if (data.Response === 'True' && data.Search) {
+      if (data.results && data.results.length > 0) {
+        const mappedMovies: Movie[] = data.results.map(item => ({
+          Poster: item.image,
+          Title: item.title,
+          Type: item.item_type === 'tvshow' ? 'series' : item.item_type,
+          Year: item.release_date ? item.release_date.split('-')[0] : 'N/A',
+          imdbID: item.imdb?.id || ''
+        }))
+
         if (isNewSearch) {
-          setMovies(data.Search)
-          // Handle potential commas in totalResults string
-          setTotalResults(parseInt((data.totalResults || '0').replace(/,/g, '')))
+          setMovies(mappedMovies)
+          setTotalResults(data.total_results)
         } else {
-          setMovies(prev => [...prev, ...data.Search!])
+          setMovies(prev => [...prev, ...mappedMovies])
         }
         setPage(pageNum)
       } else {
         if (isNewSearch) {
-          setError(data.Error || 'Nessun risultato trovato')
+          setError('Nessun risultato trovato')
           setTotalResults(0)
         }
       }
@@ -68,16 +71,11 @@ function Search() {
       setLoading(false)
       setLoadingMore(false)
     }
-  }, [title, type, year])
+  }, [title, type])
 
   // Discovery search on mount
   useEffect(() => {
-    const currentYear = new Date().getFullYear().toString()
-    const initDiscovery = async () => {
-      await fetchMovies(1, true, 'movie', currentYear).catch((e) => console.error(e))
-    }
-    initDiscovery().catch((e) => console.error(e))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    fetchMovies(1, true, '').catch((e) => console.error(e))
   }, [])
 
   const lastMovieElementRef = useCallback((node: HTMLDivElement | null) => {
@@ -87,24 +85,21 @@ function Search() {
     observer.current = new IntersectionObserver(entries => {
       const firstEntry = entries[0];
       if (firstEntry && firstEntry.isIntersecting && movies.length < totalResults) {
-        const currentYear = new Date().getFullYear().toString()
-        fetchMovies(page + 1, false, isDiscovery ? 'movie' : title, isDiscovery ? currentYear : undefined).catch((e) => console.error(e))
+        fetchMovies(page + 1, false).catch((e) => console.error(e))
       }
     })
 
     if (node) observer.current.observe(node)
-  }, [loading, loadingMore, movies.length, totalResults, page, fetchMovies, isDiscovery, title])
+  }, [loading, loadingMore, movies.length, totalResults, page, fetchMovies])
 
   const handleReset = () => {
     setTitle('')
     setType('')
-    setYear('')
     setIsDiscovery(true)
-    const currentYear = new Date().getFullYear().toString()
-    fetchMovies(1, true, 'movie', currentYear).catch((e) => console.error(e))
+    fetchMovies(1, true, '').catch((e) => console.error(e))
   }
 
-  const handleSearch = (e: React.SubmitEvent<HTMLFormElement>) => {
+  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setIsDiscovery(false)
     fetchMovies(1, true).catch((e) => console.error(e))
@@ -122,7 +117,7 @@ function Search() {
         <div className="absolute top-0 left-0 right-0 h-1 bg-red-600/50" />
         
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          <div className="md:col-span-2">
+          <div className="md:col-span-3">
             <label className="block text-xs font-bold uppercase tracking-widest text-zinc-400 mb-2.5 ml-1">Titolo Film / Serie</label>
             <input
               type="text"
@@ -149,16 +144,6 @@ function Search() {
                 <ChevronDownIcon className="w-4 h-4" />
               </div>
             </div>
-          </div>
-          <div>
-            <label className="block text-xs font-bold uppercase tracking-widest text-zinc-400 mb-2.5 ml-1">Anno</label>
-            <input
-              type="number"
-              value={year}
-              onChange={(e) => setYear(e.target.value)}
-              placeholder="E.g. 2026"
-              className="w-full bg-zinc-800 border border-zinc-700 rounded-md px-4 py-3.5 focus:ring-2 focus:ring-red-600 outline-none text-white transition-all placeholder:text-zinc-500 focus:bg-zinc-700/50"
-            />
           </div>
           <div className="md:col-span-4 flex flex-col sm:flex-row justify-end gap-4 mt-4 pt-6 border-t border-zinc-800">
             <button

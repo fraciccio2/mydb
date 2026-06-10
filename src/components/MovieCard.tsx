@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { FilmIcon, TvIcon, QuestionMarkCircleIcon, PuzzlePieceIcon } from '@heroicons/react/24/outline'
+import { FilmIcon, TvIcon, QuestionMarkCircleIcon } from '@heroicons/react/24/outline'
 import type { Movie } from '../types'
 
 interface MovieCardProps {
@@ -17,8 +17,6 @@ function MovieCard({ movie }: MovieCardProps) {
         return { label: 'Film', icon: <FilmIcon className="w-3 h-3" /> };
       case 'series':
         return { label: 'Serie TV', icon: <TvIcon className="w-3 h-3" /> };
-      case 'game':
-        return { label: 'Gioco', icon: <PuzzlePieceIcon className="w-3 h-3" /> };
       default:
         return { label: movie.Type, icon: <QuestionMarkCircleIcon className="w-3 h-3" /> };
     }
