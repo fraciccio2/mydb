@@ -10,63 +10,62 @@ function MovieCard({ movie }: MovieCardProps) {
   const [imgError, setImgError] = useState(false);
   const isPlaceholder = movie.Poster === 'N/A' || imgError;
 
-  const getTypeIcon = () => {
+  const getTypeLabel = () => {
     switch (movie.Type) {
       case 'movie':
-        return <FilmIcon className="w-4 h-4" />;
+        return { label: 'Film', icon: <FilmIcon className="w-3 h-3" /> };
       case 'series':
-        return <TvIcon className="w-4 h-4" />;
+        return { label: 'Serie TV', icon: <TvIcon className="w-3 h-3" /> };
       case 'game':
-        return <PuzzlePieceIcon className="w-4 h-4" />;
+        return { label: 'Gioco', icon: <PuzzlePieceIcon className="w-3 h-3" /> };
       default:
-        return <QuestionMarkCircleIcon className="w-4 h-4" />;
+        return { label: movie.Type, icon: <QuestionMarkCircleIcon className="w-3 h-3" /> };
     }
   };
 
+  const typeInfo = getTypeLabel();
+
   return (
-    <div className="group bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-sky-500/50 transition-all hover:shadow-2xl hover:shadow-sky-500/10 flex flex-col h-full">
+    <div className="group bg-zinc-900 rounded-md overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-black/80 flex flex-col h-full relative border border-zinc-800/50 hover:border-zinc-700">
       {/* Poster Container */}
-      <div className="aspect-[2/3] relative overflow-hidden bg-slate-900">
+      <div className="aspect-2/3 relative overflow-hidden bg-zinc-950">
         {!isPlaceholder ? (
           <img
             src={movie.Poster}
             alt={movie.Title}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+            className="w-full h-full object-cover transition-transform duration-500"
             loading="lazy"
             onError={() => setImgError(true)}
           />
         ) : (
-          <div className="w-full h-full flex flex-col items-center justify-center text-slate-600 p-4">
+          <div className="w-full h-full flex flex-col items-center justify-center text-zinc-800 p-4">
             <FilmIcon className="w-12 h-12 mb-2 opacity-20" />
-            <span className="text-xs uppercase tracking-wider font-semibold">No Poster</span>
+            <span className="text-[10px] uppercase tracking-widest font-black opacity-40 text-center">Nessuna locandina</span>
           </div>
         )}
-...
-
-        {/* Overlay for Type and Year */}
-        <div className="absolute top-2 right-2 flex flex-col gap-2">
-           <span className="bg-slate-900/80 backdrop-blur-sm text-sky-400 p-1.5 rounded-lg border border-slate-700 shadow-lg">
-             {getTypeIcon()}
-           </span>
-        </div>
+        
+        {/* Gradient Bottom Overlay */}
+        <div className="absolute inset-0 bg-linear-to-t from-zinc-950 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300" />
       </div>
 
       {/* Content */}
-      <div className="p-4 flex flex-col flex-1">
+      <div className="p-4 flex flex-col flex-1 bg-zinc-900">
         <div className="flex-1">
-          <h3 className="font-bold text-slate-100 leading-tight line-clamp-2 group-hover:text-sky-400 transition-colors mb-1" title={movie.Title}>
+          <h3 className="font-bold text-white leading-snug line-clamp-2 group-hover:text-red-500 transition-colors mb-2 text-sm" title={movie.Title}>
             {movie.Title}
           </h3>
-          <span className="text-slate-400 text-sm font-medium">{movie.Year}</span>
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-zinc-400 text-xs font-semibold">{movie.Year}</span>
+            <span className="flex items-center gap-1.5 text-[10px] uppercase tracking-wider font-bold text-red-500 bg-red-500/10 border border-red-500/20 px-2 py-0.5 rounded-full">
+              {typeInfo.icon}
+              {typeInfo.label}
+            </span>
+          </div>
         </div>
         
-        <div className="mt-4 flex items-center justify-between border-t border-slate-700/50 pt-3">
-          <span className="text-[10px] uppercase tracking-widest font-bold text-slate-500 bg-slate-900/50 px-2 py-0.5 rounded">
-            {movie.Type}
-          </span>
-          {/* We'll add a "Mark as Seen" button here later */}
-          <button className="text-xs font-semibold text-sky-400 hover:text-sky-300 transition-colors">
-            Details →
+        <div className="mt-4 flex items-center justify-end border-t border-zinc-800/50 pt-3">
+          <button className="text-[10px] font-black uppercase tracking-widest text-zinc-500 hover:text-red-500 transition-colors group-hover:text-zinc-300">
+            Dettagli →
           </button>
         </div>
       </div>

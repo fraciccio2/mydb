@@ -1,58 +1,44 @@
-# Project Overview
+# Project Overview: MYDB
 
-`mydb` is a modern web application built using **React 19**, **TypeScript**, and **Vite**. The project is initialized with a standard Vite template, providing a fast development environment with Hot Module Replacement (HMR) and an optimized production build pipeline.
+`mydb` is a modern, responsive web application for searching and tracking movies, series, and games. It leverages the **OMDb API** to fetch data and provides a seamless user experience with infinite scrolling and advanced filtering.
 
 ## Main Technologies
 - **Framework:** React 19
+- **Navigation:** React Router 7 (`react-router-dom`)
+- **Styling:** Tailwind CSS v4
+- **Icons:** Heroicons
 - **Language:** TypeScript (ES2023)
 - **Build Tool:** Vite 8
-- **Linting:** ESLint 10
+
+# Project Architecture
+
+The application is organized into a modular structure:
+
+- `src/pages/`: Contains page-level components.
+  - `Search.tsx`: Advanced search interface with filters (Title, Type, Year) and infinite scroll implementation using `IntersectionObserver`.
+  - `Seen.tsx`: Placeholder for the personalized list of watched content.
+- `src/components/`: Reusable UI components.
+  - `MovieCard.tsx`: Displays movie details (Poster, Title, Year, Type) with dynamic icons and broken image handling.
+- `src/types.ts`: Centralized TypeScript interfaces (`Movie`, `OmdbSearchResponse`, etc.).
+- `src/App.tsx`: Main layout, global navigation header (MYDB branding), and route definitions.
+
+# Key Features
+
+- **Advanced Search:** Filter by title, type (Movie, Series, Game), and year.
+- **Infinite Scroll:** Automatically loads the next 10 results from OMDb as the user scrolls.
+- **Robust Image Handling:** Automatically falls back to a placeholder if a movie poster URL returns a 404 or is "N/A".
+- **Responsive Design:** Optimized for both mobile and desktop viewports.
+- **Environment Management:** API keys are managed via `.env.local` using the `VITE_` prefix.
 
 # Building and Running
 
-The project uses standard `npm` scripts for development and deployment:
-
-- **Start Development Server:**
-  ```bash
-  npm run dev
-  ```
-  Launches the Vite development server with HMR.
-
-- **Production Build:**
-  ```bash
-  npm run build
-  ```
-  Compiles TypeScript (`tsc -b`) and bundles the application for production using Vite.
-
-- **Linting:**
-  ```bash
-  npm run lint
-  ```
-  Runs ESLint to check for code quality and style issues.
-
-- **Preview Production Build:**
-  ```bash
-  npm run preview
-  ```
-  Serves the locally built production bundle for testing.
+- **Development:** `npm run dev`
+- **Build:** `npm run build` (Runs `tsc` and `vite build`)
+- **Linting:** `npm run lint`
 
 # Development Conventions
 
-- **Component Style:** Use functional components with React Hooks.
-- **Type Safety:** Maintain strict TypeScript typing. The project uses `tsconfig.app.json` for application code and `tsconfig.node.json` for build-time scripts.
-- **Strict Mode:** Always wrap the root component in `<StrictMode>` (found in `src/main.tsx`).
-- **Styling:** Modular CSS is used (`App.css`, `index.css`). Follow existing patterns for visual consistency.
-- **Assets:** Store static assets in `src/assets/` and reference them using ESM imports.
-- **ESLint:** Adhere to the rules defined in `eslint.config.js`.
-
-# Project Structure
-
-- `src/`: Main source code.
-  - `main.tsx`: Application entry point.
-  - `App.tsx`: Root component.
-  - `assets/`: Images, icons, and other static files.
-- `public/`: Assets served directly (e.g., `favicon.svg`, `icons.svg`).
-- `index.html`: Base HTML template.
-- `vite.config.ts`: Vite configuration.
-- `tsconfig.*.json`: TypeScript configurations.
-- `eslint.config.js`: ESLint configuration.
+- **State Management:** Use standard React Hooks (`useState`, `useCallback`, `useRef`).
+- **Types:** Always define interfaces for API responses and component props in `src/types.ts`.
+- **Styling:** Use Tailwind utility classes directly in components. Follow the established dark theme (`slate-900` background).
+- **Icons:** Prefer Heroicons (outline version) for consistency.
