@@ -1,6 +1,7 @@
 import { Routes, Route, Link, useLocation } from 'react-router-dom'
 import Search from './pages/Search'
 import Seen from './pages/Seen'
+import Details from './pages/Details'
 
 function App() {
   const location = useLocation();
@@ -40,6 +41,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Search />} />
           <Route path="/seen" element={<Seen />} />
+          <Route path="/movie/:id" element={<Details />} />
         </Routes>
       </main>
     </div>

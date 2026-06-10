@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { FilmIcon, TvIcon, QuestionMarkCircleIcon, PuzzlePieceIcon } from '@heroicons/react/24/outline'
 import type { Movie } from '../types'
 
@@ -26,7 +27,10 @@ function MovieCard({ movie }: MovieCardProps) {
   const typeInfo = getTypeLabel();
 
   return (
-    <div className="group bg-zinc-900 rounded-md overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-black/80 flex flex-col h-full relative border border-zinc-800/50 hover:border-zinc-700">
+    <Link 
+      to={`/movie/${movie.imdbID}`}
+      className="group bg-zinc-900 rounded-md overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-black/80 flex flex-col h-full relative border border-zinc-800/50 hover:border-zinc-700"
+    >
       {/* Poster Container */}
       <div className="aspect-2/3 relative overflow-hidden bg-zinc-950">
         {!isPlaceholder ? (
@@ -64,12 +68,12 @@ function MovieCard({ movie }: MovieCardProps) {
         </div>
         
         <div className="mt-4 flex items-center justify-end border-t border-zinc-800/50 pt-3">
-          <button className="text-[10px] font-black uppercase tracking-widest text-zinc-500 hover:text-red-500 transition-colors group-hover:text-zinc-300">
+          <span className="text-[10px] font-black uppercase tracking-widest text-zinc-500 group-hover:text-red-500 transition-colors">
             Dettagli →
-          </button>
+          </span>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
 
