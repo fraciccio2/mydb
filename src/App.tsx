@@ -18,7 +18,7 @@ function App() {
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center gap-2">
-              <span className="text-2xl">🎬</span>
+              <img src="/logo.png" alt="MYDB Logo" className="h-8 w-auto" />
               <span className="font-black text-2xl tracking-tighter text-red-600">
                 MYDB
               </span>
