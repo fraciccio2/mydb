@@ -67,10 +67,14 @@ function Search() {
           if (data.results && data.results.length > 0) {
             const mappedMovies: Movie[] = data.results.map((item) => ({
               Poster: item.image,
-              Title: item.title,
+              Title:
+                item.original_title.toLowerCase() === item.title.toLowerCase()
+                  ? item.original_title
+                  : item.original_title + " - (" + item.title + ")",
               Type: item.item_type === "tvshow" ? "series" : item.item_type,
               Year: item.release_date ? item.release_date.split("-")[0] : "N/A",
               imdbID: item.imdb?.id.toString() || "",
+              Runtime: 0,
             }));
 
             if (isNewSearch) {

@@ -89,7 +89,16 @@ function Details() {
           if (whatsonItem) {
             // Priority: WhatsOn. Integrating Plot and Actors from OMDb if available.
             const hybrid: MovieDetails = {
-              Title: whatsonItem.title || omdbData?.Title || "N/A",
+              Title:
+                (whatsonItem.original_title.toLowerCase() ===
+                whatsonItem.title.toLowerCase()
+                  ? whatsonItem.original_title
+                  : whatsonItem.original_title +
+                    " - (" +
+                    whatsonItem.title +
+                    ")") ||
+                omdbData?.Title ||
+                "N/A",
               Year:
                 (whatsonItem.release_date
                   ? whatsonItem.release_date.split("-")[0]
@@ -233,30 +242,15 @@ function Details() {
   }
 
   // Helper to prioritize WhatsOn data
-  const getFallback = (
-    whatsOnVal: string | undefined | null,
-    omdbVal: string,
-    placeholder: string = "-",
-  ) => {
-    if (whatsOnVal && whatsOnVal !== "N/A") return whatsOnVal;
-    if (omdbVal && omdbVal !== "N/A") return omdbVal;
+  const getFallback = (value: string | null, placeholder: string = "-") => {
+    if (value && value !== "N/A") return value;
     return placeholder;
   };
 
-  const title = getFallback(movie.whatson?.title, movie.Title, "Title Unknown");
-  const poster = getFallback(
-    movie.whatson?.image,
-    movie.Poster || "N/A",
-    "N/A",
-  );
-  const year = getFallback(
-    movie.whatson?.release_date?.split("-")[0],
-    movie.Year,
-  );
-  const runtime = getFallback(
-    movie.whatson?.runtime ? `${movie.whatson.runtime / 60} min` : null,
-    movie.Runtime,
-  );
+  const title = getFallback(movie.Title, "Title Unknown");
+  const poster = getFallback(movie.Poster || "N/A", "N/A");
+  const year = getFallback(movie.Year);
+  const runtime = getFallback(movie.Runtime);
   const isPlaceholder = poster === "N/A" || imgError;
 
   return (
@@ -682,7 +676,7 @@ function Details() {
               PLOT
             </h3>
             <p className="text-zinc-300 leading-relaxed text-lg font-light">
-              {getFallback(null, movie.Plot, "Plot not available.")}
+              {getFallback(movie.Plot, "Plot not available.")}
             </p>
           </section>
 
