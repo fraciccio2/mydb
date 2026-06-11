@@ -42,8 +42,8 @@ function Search() {
       setError("");
 
       try {
-        const apiKeyWhatsON = import.meta.env.VITE_WHATS_ON_API_KEY;
-        const apiKeyOMDB = import.meta.env.VITE_OMDB_API_KEY;
+        const apiKeyWhatsON = "d0b8b76f-d505-4d36-82ea-e8f968a2dbd1";
+        const apiKeyOMDB = "704c9e59";
 
         const currentTitle = searchTitle !== undefined ? searchTitle : title;
         let currentSource = isNewSearch ? "whatson" : source;

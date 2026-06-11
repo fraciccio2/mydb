@@ -51,8 +51,8 @@ function Details() {
       setImgError(false);
 
       try {
-        const apiKeyOMDB = import.meta.env.VITE_OMDB_API_KEY;
-        const apiKeyWhatsON = import.meta.env.VITE_WHATS_ON_API_KEY;
+        const apiKeyOMDB = "704c9e59";
+        const apiKeyWhatsON = "d0b8b76f-d505-4d36-82ea-e8f968a2dbd1";
 
         // Check if seen in Firestore
         const docRef = doc(db, "movies", id);
