@@ -1,11 +1,12 @@
 export interface Movie {
+  Genres?: string[];
   Poster: string | null;
+  Runtime: string | number;
   Title: string;
   Type: string;
+  WatchedAt?: string;
   Year: string;
   imdbID: string | null;
-  Runtime?: string | number;
-  Genres?: string[];
 }
 
 export interface Rating {

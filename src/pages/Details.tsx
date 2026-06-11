@@ -185,8 +185,9 @@ function Details() {
           Runtime:
             typeof movie.Runtime === "string"
               ? fromMinStringToSecond(movie.Runtime)
-              : movie.Runtime, // Convert to seconds if string
+              : movie.Runtime,
           Genres: movie.Genre.split(", "),
+          WatchedAt: new Date().toISOString(),
         };
         await setDoc(docRef, movieToSave);
         setIsSeen(true);
@@ -263,11 +264,11 @@ function Details() {
       {/* Back Button */}
       <button
         onClick={() => navigate(-1)}
-        className="flex items-center gap-2 text-zinc-500 hover:text-white mb-10 transition-colors group"
+        className="flex items-center gap-2 text-zinc-500 hover:text-white mb-10 transition-colors group cursor-pointer"
       >
         <ArrowLeftIcon className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
         <span className="text-sm font-bold uppercase tracking-widest">
-          Back to search
+          Back
         </span>
       </button>
 
@@ -310,44 +311,46 @@ function Details() {
           </div>
 
           {/* Seen Toggle Button */}
-          <button
-            onClick={handleToggleSeen}
-            disabled={toggling}
-            className={`w-full py-4 rounded-lg font-black uppercase tracking-widest text-xs flex items-center justify-center gap-3 transition-all active:scale-95 ${
-              isSeen
-                ? "bg-green-600/10 text-green-500 border border-green-600/20 hover:bg-green-600 hover:text-white"
-                : "bg-red-600 text-white hover:bg-red-700 shadow-xl shadow-red-600/20"
-            }`}
-          >
-            {toggling ? (
-              <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                  fill="none"
-                />
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                />
-              </svg>
-            ) : isSeen ? (
-              <>
-                <CheckCircleIconSolid className="w-5 h-5" />
-                Seen
-              </>
-            ) : (
-              <>
-                <PlusCircleIcon className="w-5 h-5" />
-                Mark as seen
-              </>
-            )}
-          </button>
+          {movie.Type === "movie" && (
+            <button
+              onClick={handleToggleSeen}
+              disabled={toggling}
+              className={`w-full py-4 rounded-lg font-black uppercase tracking-widest text-xs flex items-center justify-center gap-3 transition-all active:scale-95 ${
+                isSeen
+                  ? "bg-green-600/10 text-green-500 border border-green-600/20 hover:bg-green-600 hover:text-white"
+                  : "bg-red-600 text-white hover:bg-red-700 shadow-xl shadow-red-600/20"
+              }`}
+            >
+              {toggling ? (
+                <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                    fill="none"
+                  />
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  />
+                </svg>
+              ) : isSeen ? (
+                <>
+                  <CheckCircleIconSolid className="w-5 h-5" />
+                  Seen
+                </>
+              ) : (
+                <>
+                  <PlusCircleIcon className="w-5 h-5" />
+                  Mark as seen
+                </>
+              )}
+            </button>
+          )}
 
           {/* Quick Stats */}
           <div className="grid grid-cols-2 gap-4">
@@ -704,14 +707,6 @@ function Details() {
                     </span>
                     <span className="text-white font-medium">
                       {getFallback(null, movie.Writer)}
-                    </span>
-                  </div>
-                  <div>
-                    <span className="block text-[10px] text-zinc-500 font-bold uppercase tracking-widest mb-1">
-                      Produzione
-                    </span>
-                    <span className="text-white font-medium">
-                      {getFallback(null, movie.Production)}
                     </span>
                   </div>
                 </div>
