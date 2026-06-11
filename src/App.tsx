@@ -2,7 +2,7 @@ import { Routes, Route, Link, useLocation } from "react-router-dom";
 import Search from "./pages/Search";
 import Seen from "./pages/Seen";
 import Details from "./pages/Details";
-import logo from "./assets/logo.png";
+import logo from "./assets/logo.svg";
 
 function App() {
   const location = useLocation();
