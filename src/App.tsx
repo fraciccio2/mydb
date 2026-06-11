@@ -2,6 +2,7 @@ import { Routes, Route, Link, useLocation } from "react-router-dom";
 import Search from "./pages/Search";
 import Seen from "./pages/Seen";
 import Details from "./pages/Details";
+import logo from "./assets/logo.png";
 
 function App() {
   const location = useLocation();
@@ -18,7 +19,7 @@ function App() {
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center gap-2">
-              <img src="/logo.png" alt="MYDB Logo" className="h-8 w-auto" />
+              <img src={logo} alt="MYDB Logo" className="h-8 w-auto" />
               <span className="font-black text-2xl tracking-tighter text-red-600">
                 MYDB
               </span>
