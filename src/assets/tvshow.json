@@ -1,0 +1,1282 @@
+{
+  "shows": [
+    {
+      "id": 450033,
+      "name": "Spider-Noir",
+      "poster": {
+        "id": "64561525",
+        "url": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/450033\/posters\/69320173170ae.jpg",
+        "width": 680,
+        "height": 1000,
+        "versions": {
+          "small": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/450033\/posters\/69320173170ae.jpg",
+          "medium": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/450033\/posters\/69320173170ae.jpg",
+          "big": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/450033\/posters\/69320173170ae.jpg"
+        }
+      },
+      "filters": [
+        {
+          "id": "progress",
+          "values": ["up_to_date"]
+        },
+        {
+          "id": "status",
+          "values": ["ongoing"]
+        }
+      ],
+      "sorting": [
+        {
+          "id": "last_watched",
+          "value": "1780604225"
+        },
+        {
+          "id": "last_added",
+          "value": "1780483515"
+        },
+        {
+          "id": "alphabetical",
+          "value": "Spider-Noir"
+        }
+      ],
+      "watched_episode_count": 8,
+      "aired_episode_count": 8,
+      "status": "Continuing",
+      "is_followed": true,
+      "is_up_to_date": true,
+      "is_archived": false,
+      "is_for_later": false,
+      "is_favorite": false,
+      "fanart": {
+        "id": "64746163",
+        "url": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/450033\/backgrounds\/6a1cf39e02f1b.jpg",
+        "width": 1280,
+        "height": 720,
+        "versions": {
+          "small": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/450033\/backgrounds\/6a1cf39e02f1b.jpg",
+          "medium": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/450033\/backgrounds\/6a1cf39e02f1b.jpg",
+          "big": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/450033\/backgrounds\/6a1cf39e02f1b.jpg"
+        }
+      }
+    },
+    {
+      "id": 470108,
+      "name": "My 2 Cents",
+      "poster": {
+        "id": "64741925",
+        "url": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/470108\/posters\/6a16f91bb4212.jpg",
+        "width": 680,
+        "height": 1000,
+        "versions": {
+          "small": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/470108\/posters\/6a16f91bb4212.jpg",
+          "medium": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/470108\/posters\/6a16f91bb4212.jpg",
+          "big": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/470108\/posters\/6a16f91bb4212.jpg"
+        }
+      },
+      "filters": [
+        {
+          "id": "progress",
+          "values": ["finished"]
+        },
+        {
+          "id": "status",
+          "values": ["ended"]
+        }
+      ],
+      "sorting": [
+        {
+          "id": "last_watched",
+          "value": "1780344990"
+        },
+        {
+          "id": "last_added",
+          "value": "1779998260"
+        },
+        {
+          "id": "alphabetical",
+          "value": "My 2 Cents"
+        }
+      ],
+      "watched_episode_count": 8,
+      "aired_episode_count": 8,
+      "status": "Ended",
+      "is_followed": true,
+      "is_up_to_date": true,
+      "is_archived": false,
+      "is_for_later": false,
+      "is_favorite": false,
+      "fanart": {
+        "id": "64671106",
+        "url": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/470108\/backgrounds\/69b8b759979cc.jpg",
+        "width": 1280,
+        "height": 720,
+        "versions": {
+          "small": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/470108\/backgrounds\/69b8b759979cc.jpg",
+          "medium": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/470108\/backgrounds\/69b8b759979cc.jpg",
+          "big": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/470108\/backgrounds\/69b8b759979cc.jpg"
+        }
+      }
+    },
+    {
+      "id": 468641,
+      "name": "Sicily Express",
+      "poster": {
+        "id": "64588818",
+        "url": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/468641\/posters\/69567f539ea77.jpg",
+        "width": 680,
+        "height": 1000,
+        "versions": {
+          "small": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/468641\/posters\/69567f539ea77.jpg",
+          "medium": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/468641\/posters\/69567f539ea77.jpg",
+          "big": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/468641\/posters\/69567f539ea77.jpg"
+        }
+      },
+      "filters": [
+        {
+          "id": "progress",
+          "values": ["finished"]
+        },
+        {
+          "id": "status",
+          "values": ["ended"]
+        }
+      ],
+      "sorting": [
+        {
+          "id": "last_watched",
+          "value": "1766879132"
+        },
+        {
+          "id": "last_added",
+          "value": "1766870584"
+        },
+        {
+          "id": "alphabetical",
+          "value": "Sicily Express"
+        }
+      ],
+      "watched_episode_count": 6,
+      "aired_episode_count": 5,
+      "status": "Ended",
+      "is_followed": true,
+      "is_up_to_date": true,
+      "is_archived": false,
+      "is_for_later": false,
+      "is_favorite": false,
+      "fanart": {
+        "id": "64487119",
+        "url": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/468641\/backgrounds\/68d85e8637199.jpg",
+        "width": 1280,
+        "height": 720,
+        "versions": {
+          "small": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/468641\/backgrounds\/68d85e8637199.jpg",
+          "medium": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/468641\/backgrounds\/68d85e8637199.jpg",
+          "big": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/468641\/backgrounds\/68d85e8637199.jpg"
+        }
+      }
+    },
+    {
+      "id": 463630,
+      "name": "Il Baracchino",
+      "poster": {
+        "id": "64342268",
+        "url": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/463630\/posters\/6822ee879fa32.jpg",
+        "width": 680,
+        "height": 1000,
+        "versions": {
+          "small": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/463630\/posters\/6822ee879fa32.jpg",
+          "medium": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/463630\/posters\/6822ee879fa32.jpg",
+          "big": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/463630\/posters\/6822ee879fa32.jpg"
+        }
+      },
+      "filters": [
+        {
+          "id": "progress",
+          "values": ["up_to_date"]
+        },
+        {
+          "id": "status",
+          "values": ["ongoing"]
+        }
+      ],
+      "sorting": [
+        {
+          "id": "last_watched",
+          "value": "1749665759"
+        },
+        {
+          "id": "last_added",
+          "value": "1749407880"
+        },
+        {
+          "id": "alphabetical",
+          "value": "Il Baracchino"
+        }
+      ],
+      "watched_episode_count": 6,
+      "aired_episode_count": 0,
+      "status": null,
+      "is_followed": true,
+      "is_up_to_date": true,
+      "is_archived": false,
+      "is_for_later": false,
+      "is_favorite": false,
+      "fanart": {
+        "id": "64342267",
+        "url": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/463630\/backgrounds\/6822ee1ced3ff.jpg",
+        "width": 1280,
+        "height": 720,
+        "versions": {
+          "small": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/463630\/backgrounds\/6822ee1ced3ff.jpg",
+          "medium": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/463630\/backgrounds\/6822ee1ced3ff.jpg",
+          "big": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/463630\/backgrounds\/6822ee1ced3ff.jpg"
+        }
+      }
+    },
+    {
+      "id": 253463,
+      "name": "Black Mirror",
+      "poster": {
+        "id": "1252088",
+        "url": "https:\/\/artworks.thetvdb.com\/banners\/posters\/253463-4.jpg",
+        "width": 680,
+        "height": 1000,
+        "versions": {
+          "small": "https:\/\/artworks.thetvdb.com\/banners\/posters\/253463-4.jpg",
+          "medium": "https:\/\/artworks.thetvdb.com\/banners\/posters\/253463-4.jpg",
+          "big": "https:\/\/artworks.thetvdb.com\/banners\/posters\/253463-4.jpg"
+        }
+      },
+      "filters": [
+        {
+          "id": "progress",
+          "values": ["up_to_date"]
+        },
+        {
+          "id": "status",
+          "values": ["ongoing"]
+        }
+      ],
+      "sorting": [
+        {
+          "id": "last_watched",
+          "value": "1744663353"
+        },
+        {
+          "id": "last_added",
+          "value": "1687547399"
+        },
+        {
+          "id": "alphabetical",
+          "value": "Black Mirror"
+        }
+      ],
+      "watched_episode_count": 32,
+      "aired_episode_count": 32,
+      "status": "Continuing",
+      "is_followed": true,
+      "is_up_to_date": true,
+      "is_archived": false,
+      "is_for_later": false,
+      "is_favorite": false,
+      "fanart": {
+        "id": "1254972",
+        "url": "https:\/\/artworks.thetvdb.com\/banners\/fanart\/original\/253463-20.jpg",
+        "width": 1280,
+        "height": 720,
+        "versions": {
+          "small": "https:\/\/artworks.thetvdb.com\/banners\/fanart\/original\/253463-20.jpg",
+          "medium": "https:\/\/artworks.thetvdb.com\/banners\/fanart\/original\/253463-20.jpg",
+          "big": "https:\/\/artworks.thetvdb.com\/banners\/fanart\/original\/253463-20.jpg"
+        }
+      }
+    },
+    {
+      "id": 427770,
+      "name": "Mussolini: Son of the Century",
+      "poster": {
+        "id": "64247121",
+        "url": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/427770\/posters\/67a8d448436eb.jpg",
+        "width": 680,
+        "height": 1000,
+        "versions": {
+          "small": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/427770\/posters\/67a8d448436eb.jpg",
+          "medium": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/427770\/posters\/67a8d448436eb.jpg",
+          "big": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/427770\/posters\/67a8d448436eb.jpg"
+        }
+      },
+      "filters": [
+        {
+          "id": "progress",
+          "values": ["finished"]
+        },
+        {
+          "id": "status",
+          "values": ["ended"]
+        }
+      ],
+      "sorting": [
+        {
+          "id": "last_watched",
+          "value": "1738356950"
+        },
+        {
+          "id": "last_added",
+          "value": "1737053749"
+        },
+        {
+          "id": "alphabetical",
+          "value": "Mussolini: Son of the Century"
+        }
+      ],
+      "watched_episode_count": 8,
+      "aired_episode_count": 8,
+      "status": "Ended",
+      "is_followed": true,
+      "is_up_to_date": true,
+      "is_archived": false,
+      "is_for_later": false,
+      "is_favorite": false,
+      "fanart": {
+        "id": "63287741",
+        "url": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/427770\/backgrounds\/638e1dc20d134.jpg",
+        "width": 1280,
+        "height": 720,
+        "versions": {
+          "small": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/427770\/backgrounds\/638e1dc20d134.jpg",
+          "medium": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/427770\/backgrounds\/638e1dc20d134.jpg",
+          "big": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/427770\/backgrounds\/638e1dc20d134.jpg"
+        }
+      }
+    },
+    {
+      "id": 411118,
+      "name": "The Patient",
+      "poster": {
+        "id": "63136697",
+        "url": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/411118\/posters\/62d06eb56916d.jpg",
+        "width": 680,
+        "height": 1000,
+        "versions": {
+          "small": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/411118\/posters\/62d06eb56916d.jpg",
+          "medium": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/411118\/posters\/62d06eb56916d.jpg",
+          "big": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/411118\/posters\/62d06eb56916d.jpg"
+        }
+      },
+      "filters": [
+        {
+          "id": "progress",
+          "values": ["finished"]
+        },
+        {
+          "id": "status",
+          "values": ["ended"]
+        }
+      ],
+      "sorting": [
+        {
+          "id": "last_watched",
+          "value": "1724793236"
+        },
+        {
+          "id": "last_added",
+          "value": "1724695642"
+        },
+        {
+          "id": "alphabetical",
+          "value": "The Patient"
+        }
+      ],
+      "watched_episode_count": 10,
+      "aired_episode_count": 10,
+      "status": "Ended",
+      "is_followed": true,
+      "is_up_to_date": true,
+      "is_archived": false,
+      "is_for_later": false,
+      "is_favorite": false,
+      "fanart": {
+        "id": "63285522",
+        "url": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/411118\/backgrounds\/638bd80dd473c.jpg",
+        "width": 1280,
+        "height": 720,
+        "versions": {
+          "small": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/411118\/backgrounds\/638bd80dd473c.jpg",
+          "medium": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/411118\/backgrounds\/638bd80dd473c.jpg",
+          "big": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/411118\/backgrounds\/638bd80dd473c.jpg"
+        }
+      }
+    },
+    {
+      "id": 426452,
+      "name": "Sausage Party: Foodtopia",
+      "poster": {
+        "id": "63412698",
+        "url": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/426452\/posters\/641255c201e72.jpg",
+        "width": 680,
+        "height": 1000,
+        "versions": {
+          "small": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/426452\/posters\/641255c201e72.jpg",
+          "medium": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/426452\/posters\/641255c201e72.jpg",
+          "big": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/426452\/posters\/641255c201e72.jpg"
+        }
+      },
+      "filters": [
+        {
+          "id": "progress",
+          "values": ["watching"]
+        },
+        {
+          "id": "status",
+          "values": ["ongoing"]
+        }
+      ],
+      "sorting": [
+        {
+          "id": "last_watched",
+          "value": "1721152614"
+        },
+        {
+          "id": "last_added",
+          "value": "1721149789"
+        },
+        {
+          "id": "alphabetical",
+          "value": "Sausage Party: Foodtopia"
+        }
+      ],
+      "watched_episode_count": 2,
+      "aired_episode_count": 16,
+      "status": "Continuing",
+      "is_followed": true,
+      "is_up_to_date": false,
+      "is_archived": false,
+      "is_for_later": false,
+      "is_favorite": false,
+      "fanart": {
+        "id": "63993279",
+        "url": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/426452\/backgrounds\/666bcfbf71307.jpg",
+        "width": 1280,
+        "height": 720,
+        "versions": {
+          "small": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/426452\/backgrounds\/666bcfbf71307.jpg",
+          "medium": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/426452\/backgrounds\/666bcfbf71307.jpg",
+          "big": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/426452\/backgrounds\/666bcfbf71307.jpg"
+        }
+      }
+    },
+    {
+      "id": 431352,
+      "name": "Fool Me Once",
+      "poster": {
+        "id": "63805392",
+        "url": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/431352\/posters\/65aa7ebb266f5.jpg",
+        "width": 680,
+        "height": 1000,
+        "versions": {
+          "small": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/431352\/posters\/65aa7ebb266f5.jpg",
+          "medium": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/431352\/posters\/65aa7ebb266f5.jpg",
+          "big": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/431352\/posters\/65aa7ebb266f5.jpg"
+        }
+      },
+      "filters": [
+        {
+          "id": "progress",
+          "values": ["finished"]
+        },
+        {
+          "id": "status",
+          "values": ["ended"]
+        }
+      ],
+      "sorting": [
+        {
+          "id": "last_watched",
+          "value": "1709545530"
+        },
+        {
+          "id": "last_added",
+          "value": "1707828589"
+        },
+        {
+          "id": "alphabetical",
+          "value": "Fool Me Once"
+        }
+      ],
+      "watched_episode_count": 8,
+      "aired_episode_count": 8,
+      "status": "Ended",
+      "is_followed": true,
+      "is_up_to_date": true,
+      "is_archived": false,
+      "is_for_later": false,
+      "is_favorite": false,
+      "fanart": {
+        "id": "63723855",
+        "url": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/431352\/backgrounds\/654d9d7e2f05f.jpg",
+        "width": 1280,
+        "height": 720,
+        "versions": {
+          "small": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/431352\/backgrounds\/654d9d7e2f05f.jpg",
+          "medium": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/431352\/backgrounds\/654d9d7e2f05f.jpg",
+          "big": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/431352\/backgrounds\/654d9d7e2f05f.jpg"
+        }
+      }
+    },
+    {
+      "id": 362472,
+      "name": "Loki",
+      "poster": {
+        "id": "62604210",
+        "url": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/362472\/posters\/609c18467f2c8.jpg",
+        "width": 680,
+        "height": 1000,
+        "versions": {
+          "small": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/362472\/posters\/609c18467f2c8.jpg",
+          "medium": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/362472\/posters\/609c18467f2c8.jpg",
+          "big": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/362472\/posters\/609c18467f2c8.jpg"
+        }
+      },
+      "filters": [
+        {
+          "id": "progress",
+          "values": ["finished"]
+        },
+        {
+          "id": "status",
+          "values": ["ended"]
+        }
+      ],
+      "sorting": [
+        {
+          "id": "last_watched",
+          "value": "1699795449"
+        },
+        {
+          "id": "last_added",
+          "value": "1687551489"
+        },
+        {
+          "id": "alphabetical",
+          "value": "Loki"
+        }
+      ],
+      "watched_episode_count": 12,
+      "aired_episode_count": 12,
+      "status": "Ended",
+      "is_followed": true,
+      "is_up_to_date": true,
+      "is_archived": false,
+      "is_for_later": false,
+      "is_favorite": false,
+      "fanart": {
+        "id": "62819460",
+        "url": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/362472\/backgrounds\/614495186a53b.jpg",
+        "width": 1280,
+        "height": 720,
+        "versions": {
+          "small": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/362472\/backgrounds\/614495186a53b.jpg",
+          "medium": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/362472\/backgrounds\/614495186a53b.jpg",
+          "big": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/362472\/backgrounds\/614495186a53b.jpg"
+        }
+      }
+    },
+    {
+      "id": 367226,
+      "name": "Midnight Mass (2021)",
+      "poster": {
+        "id": "62834431",
+        "url": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/367226\/posters\/6150c4053ab36.jpg",
+        "width": 680,
+        "height": 1000,
+        "versions": {
+          "small": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/367226\/posters\/6150c4053ab36.jpg",
+          "medium": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/367226\/posters\/6150c4053ab36.jpg",
+          "big": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/367226\/posters\/6150c4053ab36.jpg"
+        }
+      },
+      "filters": [
+        {
+          "id": "progress",
+          "values": ["finished"]
+        },
+        {
+          "id": "status",
+          "values": ["ended"]
+        }
+      ],
+      "sorting": [
+        {
+          "id": "last_watched",
+          "value": "1699207082"
+        },
+        {
+          "id": "last_added",
+          "value": "1697736487"
+        },
+        {
+          "id": "alphabetical",
+          "value": "Midnight Mass (2021)"
+        }
+      ],
+      "watched_episode_count": 7,
+      "aired_episode_count": 7,
+      "status": "Ended",
+      "is_followed": true,
+      "is_up_to_date": true,
+      "is_archived": false,
+      "is_for_later": false,
+      "is_favorite": false,
+      "fanart": {
+        "id": "62832927",
+        "url": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/367226\/backgrounds\/614f0fcc3240d.jpg",
+        "width": 1280,
+        "height": 720,
+        "versions": {
+          "small": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/367226\/backgrounds\/614f0fcc3240d.jpg",
+          "medium": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/367226\/backgrounds\/614f0fcc3240d.jpg",
+          "big": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/367226\/backgrounds\/614f0fcc3240d.jpg"
+        }
+      }
+    },
+    {
+      "id": 387087,
+      "name": "Sneakerheads",
+      "poster": {
+        "id": "62358232",
+        "url": "https:\/\/artworks.thetvdb.com\/banners\/series\/387087\/posters\/5f8092c687c4e.jpg",
+        "width": 680,
+        "height": 1000,
+        "versions": {
+          "small": "https:\/\/artworks.thetvdb.com\/banners\/series\/387087\/posters\/5f8092c687c4e.jpg",
+          "medium": "https:\/\/artworks.thetvdb.com\/banners\/series\/387087\/posters\/5f8092c687c4e.jpg",
+          "big": "https:\/\/artworks.thetvdb.com\/banners\/series\/387087\/posters\/5f8092c687c4e.jpg"
+        }
+      },
+      "filters": [
+        {
+          "id": "progress",
+          "values": ["finished"]
+        },
+        {
+          "id": "status",
+          "values": ["ended"]
+        }
+      ],
+      "sorting": [
+        {
+          "id": "last_watched",
+          "value": "1687879434"
+        },
+        {
+          "id": "last_added",
+          "value": "1687879434"
+        },
+        {
+          "id": "alphabetical",
+          "value": "Sneakerheads"
+        }
+      ],
+      "watched_episode_count": 6,
+      "aired_episode_count": 6,
+      "status": "Ended",
+      "is_followed": true,
+      "is_up_to_date": true,
+      "is_archived": false,
+      "is_for_later": false,
+      "is_favorite": false,
+      "fanart": {
+        "id": "62296500",
+        "url": "https:\/\/artworks.thetvdb.com\/banners\/series\/387087\/backgrounds\/5f3fb3ab81026.jpg",
+        "width": 1280,
+        "height": 720,
+        "versions": {
+          "small": "https:\/\/artworks.thetvdb.com\/banners\/series\/387087\/backgrounds\/5f3fb3ab81026.jpg",
+          "medium": "https:\/\/artworks.thetvdb.com\/banners\/series\/387087\/backgrounds\/5f3fb3ab81026.jpg",
+          "big": "https:\/\/artworks.thetvdb.com\/banners\/series\/387087\/backgrounds\/5f3fb3ab81026.jpg"
+        }
+      }
+    },
+    {
+      "id": 351959,
+      "name": "The Name of the Rose",
+      "poster": {
+        "id": "1314037",
+        "url": "https:\/\/artworks.thetvdb.com\/banners\/posters\/5bc5a315e63b4.jpg",
+        "width": 680,
+        "height": 1000,
+        "versions": {
+          "small": "https:\/\/artworks.thetvdb.com\/banners\/posters\/5bc5a315e63b4.jpg",
+          "medium": "https:\/\/artworks.thetvdb.com\/banners\/posters\/5bc5a315e63b4.jpg",
+          "big": "https:\/\/artworks.thetvdb.com\/banners\/posters\/5bc5a315e63b4.jpg"
+        }
+      },
+      "filters": [
+        {
+          "id": "progress",
+          "values": ["finished"]
+        },
+        {
+          "id": "status",
+          "values": ["ended"]
+        }
+      ],
+      "sorting": [
+        {
+          "id": "last_watched",
+          "value": "1687700469"
+        },
+        {
+          "id": "last_added",
+          "value": "1687700469"
+        },
+        {
+          "id": "alphabetical",
+          "value": "The Name of the Rose"
+        }
+      ],
+      "watched_episode_count": 8,
+      "aired_episode_count": 8,
+      "status": "Ended",
+      "is_followed": true,
+      "is_up_to_date": true,
+      "is_archived": false,
+      "is_for_later": false,
+      "is_favorite": false,
+      "fanart": {
+        "id": "1345290",
+        "url": "https:\/\/artworks.thetvdb.com\/banners\/fanart\/original\/5c8106a08501c.jpg",
+        "width": 1280,
+        "height": 720,
+        "versions": {
+          "small": "https:\/\/artworks.thetvdb.com\/banners\/fanart\/original\/5c8106a08501c.jpg",
+          "medium": "https:\/\/artworks.thetvdb.com\/banners\/fanart\/original\/5c8106a08501c.jpg",
+          "big": "https:\/\/artworks.thetvdb.com\/banners\/fanart\/original\/5c8106a08501c.jpg"
+        }
+      }
+    },
+    {
+      "id": 373881,
+      "name": "Freud (2020)",
+      "poster": {
+        "id": "62161813",
+        "url": "https:\/\/artworks.thetvdb.com\/banners\/series\/373881\/posters\/5ea33c38b3148.jpg",
+        "width": 680,
+        "height": 1000,
+        "versions": {
+          "small": "https:\/\/artworks.thetvdb.com\/banners\/series\/373881\/posters\/5ea33c38b3148.jpg",
+          "medium": "https:\/\/artworks.thetvdb.com\/banners\/series\/373881\/posters\/5ea33c38b3148.jpg",
+          "big": "https:\/\/artworks.thetvdb.com\/banners\/series\/373881\/posters\/5ea33c38b3148.jpg"
+        }
+      },
+      "filters": [
+        {
+          "id": "progress",
+          "values": ["finished"]
+        },
+        {
+          "id": "status",
+          "values": ["ended"]
+        }
+      ],
+      "sorting": [
+        {
+          "id": "last_watched",
+          "value": "1687551520"
+        },
+        {
+          "id": "last_added",
+          "value": "1687551519"
+        },
+        {
+          "id": "alphabetical",
+          "value": "Freud (2020)"
+        }
+      ],
+      "watched_episode_count": 8,
+      "aired_episode_count": 8,
+      "status": "Ended",
+      "is_followed": true,
+      "is_up_to_date": true,
+      "is_archived": false,
+      "is_for_later": false,
+      "is_favorite": false,
+      "fanart": {
+        "id": "62103109",
+        "url": "https:\/\/artworks.thetvdb.com\/banners\/series\/373881\/backgrounds\/62103109.jpg",
+        "width": 1280,
+        "height": 720,
+        "versions": {
+          "small": "https:\/\/artworks.thetvdb.com\/banners\/series\/373881\/backgrounds\/62103109.jpg",
+          "medium": "https:\/\/artworks.thetvdb.com\/banners\/series\/373881\/backgrounds\/62103109.jpg",
+          "big": "https:\/\/artworks.thetvdb.com\/banners\/series\/373881\/backgrounds\/62103109.jpg"
+        }
+      }
+    },
+    {
+      "id": 358474,
+      "name": "This Giant Beast That is the Global Economy",
+      "poster": {
+        "id": "1338150",
+        "url": "https:\/\/artworks.thetvdb.com\/banners\/posters\/5c5def128d7de.jpg",
+        "width": 680,
+        "height": 1000,
+        "versions": {
+          "small": "https:\/\/artworks.thetvdb.com\/banners\/posters\/5c5def128d7de.jpg",
+          "medium": "https:\/\/artworks.thetvdb.com\/banners\/posters\/5c5def128d7de.jpg",
+          "big": "https:\/\/artworks.thetvdb.com\/banners\/posters\/5c5def128d7de.jpg"
+        }
+      },
+      "filters": [
+        {
+          "id": "progress",
+          "values": ["finished"]
+        },
+        {
+          "id": "status",
+          "values": ["ended"]
+        }
+      ],
+      "sorting": [
+        {
+          "id": "last_watched",
+          "value": "1687551513"
+        },
+        {
+          "id": "last_added",
+          "value": "1687551513"
+        },
+        {
+          "id": "alphabetical",
+          "value": "This Giant Beast That is the Global Economy"
+        }
+      ],
+      "watched_episode_count": 8,
+      "aired_episode_count": 8,
+      "status": "Ended",
+      "is_followed": true,
+      "is_up_to_date": true,
+      "is_archived": false,
+      "is_for_later": false,
+      "is_favorite": false,
+      "fanart": {
+        "id": "1341459",
+        "url": "https:\/\/artworks.thetvdb.com\/banners\/fanart\/original\/5c6f14e423bac.jpg",
+        "width": 1280,
+        "height": 720,
+        "versions": {
+          "small": "https:\/\/artworks.thetvdb.com\/banners\/fanart\/original\/5c6f14e423bac.jpg",
+          "medium": "https:\/\/artworks.thetvdb.com\/banners\/fanart\/original\/5c6f14e423bac.jpg",
+          "big": "https:\/\/artworks.thetvdb.com\/banners\/fanart\/original\/5c6f14e423bac.jpg"
+        }
+      }
+    },
+    {
+      "id": 282254,
+      "name": "BoJack Horseman",
+      "poster": {
+        "id": "1031578",
+        "url": "https:\/\/artworks.thetvdb.com\/banners\/posters\/282254-6.jpg",
+        "width": 680,
+        "height": 1000,
+        "versions": {
+          "small": "https:\/\/artworks.thetvdb.com\/banners\/posters\/282254-6.jpg",
+          "medium": "https:\/\/artworks.thetvdb.com\/banners\/posters\/282254-6.jpg",
+          "big": "https:\/\/artworks.thetvdb.com\/banners\/posters\/282254-6.jpg"
+        }
+      },
+      "filters": [
+        {
+          "id": "progress",
+          "values": ["finished"]
+        },
+        {
+          "id": "status",
+          "values": ["ended"]
+        }
+      ],
+      "sorting": [
+        {
+          "id": "last_watched",
+          "value": "1687551503"
+        },
+        {
+          "id": "last_added",
+          "value": "1687551498"
+        },
+        {
+          "id": "alphabetical",
+          "value": "BoJack Horseman"
+        }
+      ],
+      "watched_episode_count": 76,
+      "aired_episode_count": 76,
+      "status": "Ended",
+      "is_followed": true,
+      "is_up_to_date": true,
+      "is_archived": false,
+      "is_for_later": false,
+      "is_favorite": false,
+      "fanart": {
+        "id": "1149842",
+        "url": "https:\/\/artworks.thetvdb.com\/banners\/fanart\/original\/282254-6.jpg",
+        "width": 1280,
+        "height": 720,
+        "versions": {
+          "small": "https:\/\/artworks.thetvdb.com\/banners\/fanart\/original\/282254-6.jpg",
+          "medium": "https:\/\/artworks.thetvdb.com\/banners\/fanart\/original\/282254-6.jpg",
+          "big": "https:\/\/artworks.thetvdb.com\/banners\/fanart\/original\/282254-6.jpg"
+        }
+      }
+    },
+    {
+      "id": 427339,
+      "name": "This World Can\u2019t Tear Me Down",
+      "poster": {
+        "id": "63528243",
+        "url": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/427339\/posters\/6485cab074173.jpg",
+        "width": 680,
+        "height": 1000,
+        "versions": {
+          "small": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/427339\/posters\/6485cab074173.jpg",
+          "medium": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/427339\/posters\/6485cab074173.jpg",
+          "big": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/427339\/posters\/6485cab074173.jpg"
+        }
+      },
+      "filters": [
+        {
+          "id": "progress",
+          "values": ["finished"]
+        },
+        {
+          "id": "status",
+          "values": ["ended"]
+        }
+      ],
+      "sorting": [
+        {
+          "id": "last_watched",
+          "value": "1687551353"
+        },
+        {
+          "id": "last_added",
+          "value": "1687551353"
+        },
+        {
+          "id": "alphabetical",
+          "value": "This World Can\u2019t Tear Me Down"
+        }
+      ],
+      "watched_episode_count": 6,
+      "aired_episode_count": 6,
+      "status": "Ended",
+      "is_followed": true,
+      "is_up_to_date": true,
+      "is_archived": false,
+      "is_for_later": false,
+      "is_favorite": false,
+      "fanart": {
+        "id": "63457902",
+        "url": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/427339\/backgrounds\/643aec018ddc4.jpg",
+        "width": 1280,
+        "height": 720,
+        "versions": {
+          "small": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/427339\/backgrounds\/643aec018ddc4.jpg",
+          "medium": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/427339\/backgrounds\/643aec018ddc4.jpg",
+          "big": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/427339\/backgrounds\/643aec018ddc4.jpg"
+        }
+      }
+    },
+    {
+      "id": 394680,
+      "name": "Tear Along the Dotted Line",
+      "poster": {
+        "id": "63476660",
+        "url": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/394680\/posters\/6449f64c27ffc.jpg",
+        "width": 680,
+        "height": 1000,
+        "versions": {
+          "small": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/394680\/posters\/6449f64c27ffc.jpg",
+          "medium": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/394680\/posters\/6449f64c27ffc.jpg",
+          "big": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/394680\/posters\/6449f64c27ffc.jpg"
+        }
+      },
+      "filters": [
+        {
+          "id": "progress",
+          "values": ["finished"]
+        },
+        {
+          "id": "status",
+          "values": ["ended"]
+        }
+      ],
+      "sorting": [
+        {
+          "id": "last_watched",
+          "value": "1687551342"
+        },
+        {
+          "id": "last_added",
+          "value": "1687551342"
+        },
+        {
+          "id": "alphabetical",
+          "value": "Tear Along the Dotted Line"
+        }
+      ],
+      "watched_episode_count": 6,
+      "aired_episode_count": 6,
+      "status": "Ended",
+      "is_followed": true,
+      "is_up_to_date": true,
+      "is_archived": false,
+      "is_for_later": false,
+      "is_favorite": false,
+      "fanart": {
+        "id": "62908432",
+        "url": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/394680\/backgrounds\/6195821e3f3e3.jpg",
+        "width": 1280,
+        "height": 720,
+        "versions": {
+          "small": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/394680\/backgrounds\/6195821e3f3e3.jpg",
+          "medium": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/394680\/backgrounds\/6195821e3f3e3.jpg",
+          "big": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/394680\/backgrounds\/6195821e3f3e3.jpg"
+        }
+      }
+    },
+    {
+      "id": 401632,
+      "name": "Framed! A Sicilian Murder Mystery",
+      "poster": {
+        "id": "63464253",
+        "url": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/401632\/posters\/64401dfb376e2.jpg",
+        "width": 680,
+        "height": 1000,
+        "versions": {
+          "small": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/401632\/posters\/64401dfb376e2.jpg",
+          "medium": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/401632\/posters\/64401dfb376e2.jpg",
+          "big": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/401632\/posters\/64401dfb376e2.jpg"
+        }
+      },
+      "filters": [
+        {
+          "id": "progress",
+          "values": ["finished"]
+        },
+        {
+          "id": "status",
+          "values": ["ended"]
+        }
+      ],
+      "sorting": [
+        {
+          "id": "last_watched",
+          "value": "1687551332"
+        },
+        {
+          "id": "last_added",
+          "value": "1687551330"
+        },
+        {
+          "id": "alphabetical",
+          "value": "Framed! A Sicilian Murder Mystery"
+        }
+      ],
+      "watched_episode_count": 12,
+      "aired_episode_count": 12,
+      "status": "Ended",
+      "is_followed": true,
+      "is_up_to_date": true,
+      "is_archived": false,
+      "is_for_later": false,
+      "is_favorite": false,
+      "fanart": {
+        "id": "62954130",
+        "url": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/401632\/backgrounds\/61cda932dc860.jpg",
+        "width": 1280,
+        "height": 720,
+        "versions": {
+          "small": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/401632\/backgrounds\/61cda932dc860.jpg",
+          "medium": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/401632\/backgrounds\/61cda932dc860.jpg",
+          "big": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/401632\/backgrounds\/61cda932dc860.jpg"
+        }
+      }
+    },
+    {
+      "id": 361034,
+      "name": "How to Sell Drugs Online (Fast)",
+      "poster": {
+        "id": "62680990",
+        "url": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/361034\/posters\/60e42a0c05cdb.jpg",
+        "width": 680,
+        "height": 1000,
+        "versions": {
+          "small": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/361034\/posters\/60e42a0c05cdb.jpg",
+          "medium": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/361034\/posters\/60e42a0c05cdb.jpg",
+          "big": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/361034\/posters\/60e42a0c05cdb.jpg"
+        }
+      },
+      "filters": [
+        {
+          "id": "progress",
+          "values": ["watching"]
+        },
+        {
+          "id": "status",
+          "values": ["ended"]
+        }
+      ],
+      "sorting": [
+        {
+          "id": "last_watched",
+          "value": "1687550531"
+        },
+        {
+          "id": "last_added",
+          "value": "1687550525"
+        },
+        {
+          "id": "alphabetical",
+          "value": "How to Sell Drugs Online (Fast)"
+        }
+      ],
+      "watched_episode_count": 18,
+      "aired_episode_count": 24,
+      "status": "Ended",
+      "is_followed": true,
+      "is_up_to_date": false,
+      "is_archived": false,
+      "is_for_later": false,
+      "is_favorite": false,
+      "fanart": {
+        "id": "62713934",
+        "url": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/361034\/backgrounds\/60ffafaa44daf.jpg",
+        "width": 1280,
+        "height": 720,
+        "versions": {
+          "small": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/361034\/backgrounds\/60ffafaa44daf.jpg",
+          "medium": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/361034\/backgrounds\/60ffafaa44daf.jpg",
+          "big": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/361034\/backgrounds\/60ffafaa44daf.jpg"
+        }
+      }
+    },
+    {
+      "id": 73739,
+      "name": "Lost",
+      "poster": {
+        "id": "888803",
+        "url": "https:\/\/artworks.thetvdb.com\/banners\/posters\/73739-11.jpg",
+        "width": 680,
+        "height": 1000,
+        "versions": {
+          "small": "https:\/\/artworks.thetvdb.com\/banners\/posters\/73739-11.jpg",
+          "medium": "https:\/\/artworks.thetvdb.com\/banners\/posters\/73739-11.jpg",
+          "big": "https:\/\/artworks.thetvdb.com\/banners\/posters\/73739-11.jpg"
+        }
+      },
+      "filters": [
+        {
+          "id": "progress",
+          "values": ["finished", "all_time_favorites"]
+        },
+        {
+          "id": "status",
+          "values": ["ended"]
+        }
+      ],
+      "sorting": [
+        {
+          "id": "last_watched",
+          "value": "1687547441"
+        },
+        {
+          "id": "last_added",
+          "value": "1687547399"
+        },
+        {
+          "id": "alphabetical",
+          "value": "Lost"
+        }
+      ],
+      "watched_episode_count": 120,
+      "aired_episode_count": 120,
+      "status": "Ended",
+      "is_followed": true,
+      "is_up_to_date": true,
+      "is_archived": false,
+      "is_for_later": false,
+      "is_favorite": true,
+      "fanart": {
+        "id": "89141",
+        "url": "https:\/\/artworks.thetvdb.com\/banners\/fanart\/original\/73739-34.jpg",
+        "width": 1280,
+        "height": 720,
+        "versions": {
+          "small": "https:\/\/artworks.thetvdb.com\/banners\/fanart\/original\/73739-34.jpg",
+          "medium": "https:\/\/artworks.thetvdb.com\/banners\/fanart\/original\/73739-34.jpg",
+          "big": "https:\/\/artworks.thetvdb.com\/banners\/fanart\/original\/73739-34.jpg"
+        }
+      }
+    },
+    {
+      "id": 453650,
+      "name": "Long Story Short",
+      "poster": {
+        "id": "64336211",
+        "url": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/453650\/posters\/6819c94c5f5af.jpg",
+        "width": 680,
+        "height": 1000,
+        "versions": {
+          "small": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/453650\/posters\/6819c94c5f5af.jpg",
+          "medium": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/453650\/posters\/6819c94c5f5af.jpg",
+          "big": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/453650\/posters\/6819c94c5f5af.jpg"
+        }
+      },
+      "filters": [
+        {
+          "id": "progress",
+          "values": ["not_started_yet"]
+        },
+        {
+          "id": "status",
+          "values": ["ongoing"]
+        }
+      ],
+      "sorting": [
+        {
+          "id": "last_watched",
+          "value": "0"
+        },
+        {
+          "id": "last_added",
+          "value": "1757195702"
+        },
+        {
+          "id": "alphabetical",
+          "value": "Long Story Short"
+        }
+      ],
+      "watched_episode_count": 0,
+      "aired_episode_count": 10,
+      "status": "Continuing",
+      "is_followed": true,
+      "is_up_to_date": false,
+      "is_archived": false,
+      "is_for_later": false,
+      "is_favorite": false,
+      "fanart": {
+        "id": "64236015",
+        "url": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/453650\/backgrounds\/679c3f13957f1.jpg",
+        "width": 1280,
+        "height": 720,
+        "versions": {
+          "small": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/453650\/backgrounds\/679c3f13957f1.jpg",
+          "medium": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/453650\/backgrounds\/679c3f13957f1.jpg",
+          "big": "https:\/\/artworks.thetvdb.com\/banners\/v4\/series\/453650\/backgrounds\/679c3f13957f1.jpg"
+        }
+      }
+    }
+  ],
+  "id": 70818989,
+  "name": "Francesco Giacomazzo"
+}

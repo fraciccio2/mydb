@@ -263,7 +263,9 @@ function Details() {
               <span className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest mb-1">
                 Year
               </span>
-              <span className="text-sm font-bold text-white">{year}</span>
+              <span className="text-sm font-bold text-white">
+                {year + (movie.whatson?.status === "Ongoing" ? " - " : "")}
+              </span>
             </div>
             <div className="bg-zinc-900/50 border border-zinc-800 p-4 rounded-lg flex flex-col items-center text-center">
               <ClockIcon className="w-5 h-5 text-red-500 mb-2" />

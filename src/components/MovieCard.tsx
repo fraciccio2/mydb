@@ -13,7 +13,7 @@ interface MovieCardProps {
 
 function MovieCard({ movie }: MovieCardProps) {
   const [imgError, setImgError] = useState(false);
-  const isPlaceholder = movie.Poster === "N/A" || imgError;
+  const isPlaceholder = !movie.Poster || movie.Poster === "N/A" || imgError;
 
   const getTypeLabel = () => {
     switch (movie.Type) {
@@ -50,7 +50,7 @@ function MovieCard({ movie }: MovieCardProps) {
           <div className="w-full h-full flex flex-col items-center justify-center text-zinc-800 p-4">
             <FilmIcon className="w-12 h-12 mb-2 opacity-20" />
             <span className="text-[10px] uppercase tracking-widest font-black opacity-40 text-center">
-              Nessuna locandina
+              No poster
             </span>
           </div>
         )}
@@ -81,7 +81,7 @@ function MovieCard({ movie }: MovieCardProps) {
 
         <div className="mt-4 flex items-center justify-end border-t border-zinc-800/50 pt-3">
           <span className="text-[10px] font-black uppercase tracking-widest text-zinc-500 group-hover:text-red-500 transition-colors">
-            Dettagli →
+            Details →
           </span>
         </div>
       </div>
