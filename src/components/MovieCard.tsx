@@ -40,7 +40,7 @@ function MovieCard({ movie }: MovieCardProps) {
       <div className="aspect-2/3 relative overflow-hidden bg-zinc-950">
         {!isPlaceholder ? (
           <img
-            src={movie.Poster}
+            src={movie.Poster ?? undefined}
             alt={movie.Title}
             className="w-full h-full object-cover transition-transform duration-500"
             loading="lazy"
