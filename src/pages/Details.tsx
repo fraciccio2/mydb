@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { doc, getDoc, setDoc, deleteDoc } from "firebase/firestore";
+import { db } from "../firebase";
 import {
   ArrowLeftIcon,
   CalendarIcon,
@@ -12,13 +14,18 @@ import {
   StarIcon,
   TrophyIcon,
   UserIcon,
+  PlusCircleIcon,
 } from "@heroicons/react/24/outline";
-import { StarIcon as StarIconSolid } from "@heroicons/react/24/solid";
+import {
+  StarIcon as StarIconSolid,
+  CheckCircleIcon as CheckCircleIconSolid,
+} from "@heroicons/react/24/solid";
 import type {
   HybridMovieDetails,
   MovieDetails,
   OmdbErrorResponse,
   WhatsOnItem,
+  Movie,
 } from "../types";
 
 function Details() {
@@ -28,6 +35,8 @@ function Details() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [imgError, setImgError] = useState(false);
+  const [isSeen, setIsSeen] = useState(false);
+  const [toggling, setToggling] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
@@ -45,25 +54,26 @@ function Details() {
         const apiKeyOMDB = import.meta.env.VITE_OMDB_API_KEY;
         const apiKeyWhatsON = import.meta.env.VITE_WHATS_ON_API_KEY;
 
-        // Parallel fetches
-        const omdbPromise = fetch(
-          `https://www.omdbapi.com/?apikey=${apiKeyOMDB}&i=${id}&plot=full`,
-          {
-            signal: controller.signal,
-          },
-        );
+        // Check if seen in Firestore
+        const docRef = doc(db, "movies", id);
+        const tvDocRef = doc(db, "tvshows", id);
 
-        const whatsonPromise = fetch(
-          `https://whatson-api.onrender.com/?imdbId=${id}&api_key=${apiKeyWhatsON}&append_to_response=platforms_links,episodes_details`,
-          {
-            signal: controller.signal,
-          },
-        );
-
-        const [omdbRes, whatsonRes] = await Promise.all([
-          omdbPromise,
-          whatsonPromise,
+        const [omdbRes, whatsonRes, seenDoc, seenTvDoc] = await Promise.all([
+          fetch(
+            `https://www.omdbapi.com/?apikey=${apiKeyOMDB}&i=${id}&plot=full`,
+            { signal: controller.signal },
+          ),
+          fetch(
+            `https://whatson-api.onrender.com/?imdbId=${id}&api_key=${apiKeyWhatsON}&append_to_response=platforms_links,episodes_details`,
+            { signal: controller.signal },
+          ),
+          getDoc(docRef),
+          getDoc(tvDocRef),
         ]);
+
+        if (seenDoc.exists() || seenTvDoc.exists()) {
+          setIsSeen(true);
+        }
 
         const omdbResData: MovieDetails | OmdbErrorResponse =
           await omdbRes.json();
@@ -88,7 +98,7 @@ function Details() {
               Released: whatsonItem.release_date || omdbData?.Released || "N/A",
               Runtime:
                 (whatsonItem.runtime
-                  ? `${whatsonItem.runtime} min`
+                  ? `${whatsonItem.runtime / 60} min`
                   : omdbData?.Runtime) || "N/A",
               Genre: omdbData?.Genre || "N/A",
               Director: omdbData?.Director || "N/A",
@@ -149,6 +159,45 @@ function Details() {
     };
   }, [id]);
 
+  const fromMinStringToSecond = (runtime: string): number => {
+    const minutes = Number(runtime.replace(" min", ""));
+    return minutes * 60;
+  };
+
+  const handleToggleSeen = async () => {
+    if (!movie || !id) return;
+    setToggling(true);
+
+    try {
+      const collectionName = movie.Type === "series" ? "tvshows" : "movies";
+      const docRef = doc(db, collectionName, id);
+
+      if (isSeen) {
+        await deleteDoc(docRef);
+        setIsSeen(false);
+      } else {
+        const movieToSave: Movie = {
+          imdbID: id,
+          Title: movie.Title,
+          Poster: movie.Poster,
+          Type: movie.Type,
+          Year: movie.Year.includes("-") ? movie.Year : movie.Year + "-01-01",
+          Runtime:
+            typeof movie.Runtime === "string"
+              ? fromMinStringToSecond(movie.Runtime)
+              : movie.Runtime, // Convert to seconds if string
+          Genres: movie.Genre.split(", "),
+        };
+        await setDoc(docRef, movieToSave);
+        setIsSeen(true);
+      }
+    } catch (err) {
+      console.error("Error toggling seen status:", err);
+    } finally {
+      setToggling(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-[80vh] flex flex-col items-center justify-center gap-4">
@@ -194,7 +243,11 @@ function Details() {
   };
 
   const title = getFallback(movie.whatson?.title, movie.Title, "Title Unknown");
-  const poster = getFallback(movie.whatson?.image, movie.Poster, "N/A");
+  const poster = getFallback(
+    movie.whatson?.image,
+    movie.Poster || "N/A",
+    "N/A",
+  );
   const year = getFallback(
     movie.whatson?.release_date?.split("-")[0],
     movie.Year,
@@ -255,6 +308,46 @@ function Details() {
               </div>
             </div>
           </div>
+
+          {/* Seen Toggle Button */}
+          <button
+            onClick={handleToggleSeen}
+            disabled={toggling}
+            className={`w-full py-4 rounded-lg font-black uppercase tracking-widest text-xs flex items-center justify-center gap-3 transition-all active:scale-95 ${
+              isSeen
+                ? "bg-green-600/10 text-green-500 border border-green-600/20 hover:bg-green-600 hover:text-white"
+                : "bg-red-600 text-white hover:bg-red-700 shadow-xl shadow-red-600/20"
+            }`}
+          >
+            {toggling ? (
+              <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                  fill="none"
+                />
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                />
+              </svg>
+            ) : isSeen ? (
+              <>
+                <CheckCircleIconSolid className="w-5 h-5" />
+                Seen
+              </>
+            ) : (
+              <>
+                <PlusCircleIcon className="w-5 h-5" />
+                Mark as seen
+              </>
+            )}
+          </button>
 
           {/* Quick Stats */}
           <div className="grid grid-cols-2 gap-4">

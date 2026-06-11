@@ -1,6 +1,8 @@
-import { useState, useMemo } from "react";
-import moviesData from "../assets/movie.json";
+import { useState, useMemo, useEffect } from "react";
+import { collection, onSnapshot, query } from "firebase/firestore";
+import { db } from "../firebase";
 import MovieCard from "../components/MovieCard";
+import type { Movie } from "../types";
 import {
   FilmIcon,
   TvIcon,
@@ -14,12 +16,30 @@ function Seen() {
   const [activeTab, setActiveTab] = useState<"movies" | "series">("movies");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedGenre, setSelectedGenre] = useState("");
+  
+  const [movies, setMovies] = useState<Movie[]>([]);
+  const [tvShows] = useState<Movie[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const moviesQuery = query(collection(db, "movies"));
+
+    const unsubscribeMovies = onSnapshot(moviesQuery, (snapshot) => {
+      const moviesList = snapshot.docs.map(doc => doc.data() as Movie);
+      setMovies(moviesList);
+      setLoading(false);
+    });
+
+    return () => {
+      unsubscribeMovies();
+    };
+  }, []);
 
   // Statistics Calculation for Movies
   const movieStats = useMemo(() => {
-    const totalCount = moviesData.length;
-    const totalSeconds = moviesData.reduce(
-      (acc, m) => acc + (m.Runtime || 0),
+    const totalCount = movies.length;
+    const totalSeconds = movies.reduce(
+      (acc, m) => acc + (Number(m.Runtime) || 0),
       0,
     );
 
@@ -28,28 +48,23 @@ function Seen() {
     const hours = Math.floor((totalSeconds % 86400) / 3600);
 
     return { totalCount, months, days, hours };
-  }, []);
+  }, [movies]);
 
-  // Mock Statistics for Series
-  const seriesStats = {
-    totalEpisodes: 458,
-    months: 2,
-    days: 14,
-    hours: 5,
-  };
+  // Statistics for Series (Mocked/Disabled)
+  const seriesStats = { totalEpisodes: 0, months: 0, days: 0, hours: 0 };
 
   // Extract unique genres for movies
   const genres = useMemo(() => {
-    const allGenres = moviesData.flatMap((m) => m.Genres || []);
+    const allGenres = movies.flatMap((m) => m.Genres || []);
     return Array.from(new Set(allGenres)).sort();
-  }, []);
+  }, [movies]);
 
   // Filter movies
   const filteredMovies = useMemo(() => {
-    return moviesData
+    return movies
       .map((m) => ({
         ...m,
-        Poster: m.Poster || "N/A", // Ensure it's at least "N/A" for MovieCard consistency
+        Poster: m.Poster || "N/A",
         Year: m.Year ? m.Year.split("-")[0] : "N/A",
       }))
       .filter((movie) => {
@@ -61,7 +76,7 @@ function Seen() {
           (movie.Genres && movie.Genres.includes(selectedGenre));
         return matchesSearch && matchesGenre;
       });
-  }, [searchQuery, selectedGenre]);
+  }, [movies, searchQuery, selectedGenre]);
 
   return (
     <div className="max-w-7xl mx-auto py-12 px-4 pb-24">
@@ -231,7 +246,16 @@ function Seen() {
       </div>
 
       {/* Content Grid */}
-      {activeTab === "movies" ? (
+      {loading ? (
+        <div className="flex flex-col items-center justify-center py-32 gap-4">
+           <div className="flex gap-2">
+            <div className="w-2 h-2 bg-red-600 rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+            <div className="w-2 h-2 bg-red-600 rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+            <div className="w-2 h-2 bg-red-600 rounded-full animate-bounce"></div>
+          </div>
+          <p className="text-zinc-500 font-bold text-xs uppercase tracking-widest animate-pulse">Loading history...</p>
+        </div>
+      ) : activeTab === "movies" ? (
         <>
           {filteredMovies.length > 0 ? (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-x-4 gap-y-12">
@@ -251,14 +275,24 @@ function Seen() {
           )}
         </>
       ) : (
-        <div className="text-center py-32 bg-zinc-900/20 border border-zinc-800 rounded-lg">
-          <div className="flex justify-center mb-6 opacity-20">
-            <TvIcon className="w-16 h-16 text-white" />
-          </div>
-          <p className="text-zinc-500 font-medium tracking-widest uppercase text-sm">
-            TV Series tracking coming soon...
-          </p>
-        </div>
+        <>
+           {tvShows.length > 0 ? (
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-x-4 gap-y-12">
+              {tvShows.map((show) => (
+                <MovieCard key={show.imdbID} movie={show as Movie} />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-32 bg-zinc-900/20 border border-zinc-800 rounded-lg">
+              <div className="flex justify-center mb-6 opacity-20">
+                <TvIcon className="w-16 h-16 text-white" />
+              </div>
+              <p className="text-zinc-500 font-medium tracking-widest uppercase text-sm">
+                No TV Series found
+              </p>
+            </div>
+          )}
+        </>
       )}
     </div>
   );
