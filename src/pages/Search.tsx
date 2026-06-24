@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback, useEffect } from "react";
+import { useState, useRef, useCallback, useEffect, useSyncExternalStore } from "react";
 import {
   MagnifyingGlassIcon,
   ChevronDownIcon,
@@ -11,21 +11,40 @@ import type {
 } from "../types";
 import MovieCard from "../components/MovieCard";
 import * as React from "react";
+import { searchStore } from "../store/searchStore";
 
 function Search() {
-  const [title, setTitle] = useState("");
-  const [type, setType] = useState<MovieType>("");
-  const [genres, setGenres] = useState("");
+  const {
+    title,
+    type,
+    genres,
+    movies,
+    totalResults,
+    page,
+    isDiscovery,
+    source,
+    error,
+    hasCachedData,
+  } = useSyncExternalStore(searchStore.subscribe, searchStore.getState);
 
-  // State for movies and pagination
-  const [movies, setMovies] = useState<Movie[]>([]);
-  const [totalResults, setTotalResults] = useState(0);
-  const [page, setPage] = useState(1);
+  const setTitle = (val: string) => searchStore.setState({ title: val });
+  const setType = (val: MovieType) => searchStore.setState({ type: val });
+  const setGenres = (val: string) => searchStore.setState({ genres: val });
+  const setMovies = (val: Movie[] | ((prev: Movie[]) => Movie[])) => {
+    if (typeof val === "function") {
+      searchStore.setState({ movies: val(searchStore.getState().movies) });
+    } else {
+      searchStore.setState({ movies: val });
+    }
+  };
+  const setTotalResults = (val: number) => searchStore.setState({ totalResults: val });
+  const setPage = (val: number) => searchStore.setState({ page: val });
+  const setIsDiscovery = (val: boolean) => searchStore.setState({ isDiscovery: val });
+  const setSource = (val: "whatson" | "omdb") => searchStore.setState({ source: val });
+  const setError = (val: string) => searchStore.setState({ error: val });
+
   const [loading, setLoading] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
-  const [error, setError] = useState("");
-  const [isDiscovery, setIsDiscovery] = useState(true);
-  const [source, setSource] = useState<"whatson" | "omdb">("whatson");
 
   const observer = useRef<IntersectionObserver | null>(null);
 
@@ -128,6 +147,7 @@ function Search() {
       } finally {
         setLoading(false);
         setLoadingMore(false);
+        searchStore.setState({ hasCachedData: true });
       }
     },
     [title, type, genres, source],
@@ -135,9 +155,30 @@ function Search() {
 
   // Discovery search on mount
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    fetchMovies(1, true, "").catch((e) => console.error(e));
+    if (!hasCachedData) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      fetchMovies(1, true, "").catch((e) => console.error(e));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Save scroll position when unmounting
+  useEffect(() => {
+    return () => {
+      searchStore.setState({ scrollY: window.scrollY });
+    };
+  }, []);
+
+  // Restore scroll position when cached movies are rendered
+  useEffect(() => {
+    const cachedState = searchStore.getState();
+    if (cachedState.hasCachedData && cachedState.scrollY > 0 && movies.length > 0) {
+      const timer = setTimeout(() => {
+        window.scrollTo(0, cachedState.scrollY);
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [movies]);
 
   const lastMovieElementRef = useCallback(
     (node: HTMLDivElement | null) => {
