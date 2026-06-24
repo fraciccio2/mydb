@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
 import { db } from "../firebase";
 import MovieCard from "../components/MovieCard";
@@ -12,19 +12,33 @@ import {
   MagnifyingGlassIcon,
   TvIcon,
 } from "@heroicons/react/24/outline";
+import { seenStore } from "../store/seenStore";
 
 function Seen() {
-  const [activeTab, setActiveTab] = useState<"movies" | "series">("movies");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedGenre, setSelectedGenre] = useState("");
-  const [sortConfig, setSortConfig] = useState({
-    field: "WatchedAt",
-    direction: "desc" as "asc" | "desc",
-  });
+  const {
+    activeTab,
+    searchQuery,
+    selectedGenre,
+    sortConfig,
+    allMovies,
+    displayCount,
+    hasCachedData,
+  } = useSyncExternalStore(seenStore.subscribe, seenStore.getState);
 
-  const [allMovies, setAllMovies] = useState<Movie[]>([]);
-  const [displayCount, setDisplayCount] = useState(12);
-  const [loading, setLoading] = useState(true);
+  const setActiveTab = (val: "movies" | "series") => seenStore.setState({ activeTab: val });
+  const setSearchQuery = (val: string) => seenStore.setState({ searchQuery: val });
+  const setSelectedGenre = (val: string) => seenStore.setState({ selectedGenre: val });
+  const setSortConfig = (val: { field: string; direction: "asc" | "desc" }) => seenStore.setState({ sortConfig: val });
+  const setAllMovies = (val: Movie[]) => seenStore.setState({ allMovies: val, hasCachedData: true });
+  const setDisplayCount = (val: number | ((prev: number) => number)) => {
+    if (typeof val === "function") {
+      seenStore.setState({ displayCount: val(seenStore.getState().displayCount) });
+    } else {
+      seenStore.setState({ displayCount: val });
+    }
+  };
+
+  const [loading, setLoading] = useState(!hasCachedData);
 
   const observer = useRef<IntersectionObserver | null>(null);
 
@@ -54,6 +68,13 @@ function Seen() {
 
     return () => unsubscribe();
   }, [sortConfig]);
+
+  // Save scroll position when unmounting
+  useEffect(() => {
+    return () => {
+      seenStore.setState({ scrollY: window.scrollY });
+    };
+  }, []);
 
   // Statistics Calculation (Client-side)
   const movieStats = useMemo(() => {
@@ -90,6 +111,17 @@ function Seen() {
   const visibleMovies = useMemo(() => {
     return filteredMovies.slice(0, displayCount);
   }, [filteredMovies, displayCount]);
+
+  // Restore scroll position when cached/loaded movies are rendered
+  useEffect(() => {
+    const cachedState = seenStore.getState();
+    if (cachedState.hasCachedData && cachedState.scrollY > 0 && visibleMovies.length > 0) {
+      const timer = setTimeout(() => {
+        window.scrollTo(0, cachedState.scrollY);
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [visibleMovies]);
 
   const lastElementRef = useCallback(
     (node: HTMLDivElement | null) => {
