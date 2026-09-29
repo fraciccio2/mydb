@@ -35,6 +35,36 @@ export interface MovieDetails extends Movie {
   Writer: string;
   imdbRating: string;
   imdbVotes: string;
+  totalSeasons?: string;
+}
+
+export interface WatchedEpisodeInfo {
+  season: number;
+  episode: number;
+  watchedAt: string;
+  title?: string;
+}
+
+export interface SeriesEpisode {
+  description?: string;
+  episode: number;
+  id?: string;
+  release_date?: string;
+  season: number;
+  title: string;
+  url?: string;
+  users_rating?: number;
+  users_rating_count?: number;
+}
+
+export interface TVShow extends Movie {
+  totalSeasons?: number;
+  totalEpisodes?: number;
+  watchedEpisodes: Record<string, WatchedEpisodeInfo>;
+  watchedEpisodesCount?: number;
+  watchedSeasons?: number[];
+  episodeRuntime?: number;
+  status?: string;
 }
 
 export interface OmdbErrorResponse {
@@ -121,4 +151,5 @@ export interface WhatsOnSearchResponse {
 // Hybrid Type for Details Page
 export interface HybridMovieDetails extends MovieDetails {
   whatson?: WhatsOnItem;
+  episodes?: SeriesEpisode[];
 }

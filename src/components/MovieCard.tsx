@@ -5,13 +5,31 @@ import {
   TvIcon,
   QuestionMarkCircleIcon,
 } from "@heroicons/react/24/outline";
-import type { Movie } from "../types";
+import type { Movie, TVShow } from "../types";
 
 interface MovieCardProps {
-  movie: Movie;
+  movie: Movie | TVShow;
+  isSeenView?: boolean;
 }
 
-function MovieCard({ movie }: MovieCardProps) {
+type SeriesStatusCategory = "ongoing" | "ended" | "other";
+
+function getSeriesStatusCategory(show: TVShow): SeriesStatusCategory {
+  const status = (show.status || "").toLowerCase().trim();
+  if (
+    status === "ongoing" ||
+    status === "continuing" ||
+    status === "in progress"
+  ) {
+    return "ongoing";
+  }
+  if (status === "ended" || status === "finished") {
+    return "ended";
+  }
+  return "other";
+}
+
+function MovieCard({ movie, isSeenView = false }: MovieCardProps) {
   const [imgError, setImgError] = useState(false);
   const isPlaceholder = !movie.Poster || movie.Poster === "N/A" || imgError;
 
@@ -30,11 +48,34 @@ function MovieCard({ movie }: MovieCardProps) {
   };
 
   const typeInfo = getTypeLabel();
+  const tvShow = movie as TVShow;
+  const watchedCount =
+    tvShow.watchedEpisodesCount ??
+    (tvShow.watchedEpisodes
+      ? Object.keys(tvShow.watchedEpisodes).length
+      : undefined);
+
+  const getBorderClasses = () => {
+    if (!isSeenView || movie.Type !== "series") {
+      return "border border-zinc-800/50 hover:border-zinc-700";
+    }
+
+    const category = getSeriesStatusCategory(tvShow);
+    switch (category) {
+      case "ongoing":
+        return "border-2 border-sky-500/80 hover:border-sky-400 shadow-md shadow-sky-500/10";
+      case "ended":
+        return "border-2 border-purple-500/80 hover:border-purple-400 shadow-md shadow-purple-500/10";
+      case "other":
+      default:
+        return "border-2 border-red-500/80 hover:border-red-400 shadow-md shadow-red-500/10";
+    }
+  };
 
   return (
     <Link
       to={`/movie/${movie.imdbID}`}
-      className="group bg-zinc-900 rounded-md overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-black/80 flex flex-col h-full relative border border-zinc-800/50 hover:border-zinc-700"
+      className={`group bg-zinc-900 rounded-md overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-black/80 flex flex-col h-full relative ${getBorderClasses()}`}
     >
       {/* Poster Container */}
       <div className="aspect-2/3 relative overflow-hidden bg-zinc-950">
@@ -76,6 +117,29 @@ function MovieCard({ movie }: MovieCardProps) {
               {typeInfo.icon}
               {typeInfo.label}
             </span>
+            {movie.Type === "series" &&
+              watchedCount !== undefined &&
+              watchedCount > 0 &&
+              (() => {
+                const isAllWatched = Boolean(
+                  tvShow.totalEpisodes &&
+                    tvShow.totalEpisodes > 0 &&
+                    watchedCount >= tvShow.totalEpisodes,
+                );
+                return (
+                  <span
+                    className={`flex items-center gap-1 text-[10px] uppercase tracking-wider font-bold px-2 py-0.5 rounded-full border ${
+                      isAllWatched
+                        ? "text-green-400 bg-green-500/10 border-green-500/20"
+                        : "text-amber-400 bg-amber-500/10 border-amber-500/20"
+                    }`}
+                  >
+                    {tvShow.totalEpisodes
+                      ? `${watchedCount}/${tvShow.totalEpisodes} eps`
+                      : `${watchedCount} eps`}
+                  </span>
+                );
+              })()}
           </div>
         </div>
 

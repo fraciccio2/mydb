@@ -1,4 +1,4 @@
-import type { Movie } from "../types";
+import type { Movie, TVShow } from "../types";
 
 export interface SeenState {
   activeTab: "movies" | "series";
@@ -9,6 +9,7 @@ export interface SeenState {
     direction: "asc" | "desc";
   };
   allMovies: Movie[];
+  allSeries: TVShow[];
   displayCount: number;
   scrollY: number;
   hasCachedData: boolean;
@@ -23,6 +24,7 @@ const initialState: SeenState = {
     direction: "desc",
   },
   allMovies: [],
+  allSeries: [],
   displayCount: 12,
   scrollY: 0,
   hasCachedData: false,
