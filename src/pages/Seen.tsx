@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore
 import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
 import { db } from "../firebase";
 import MovieCard from "../components/MovieCard";
-import type { Movie } from "../types";
+import type { Movie, TVShow } from "../types";
 import {
   ArrowsUpDownIcon,
   ClockIcon,
@@ -21,15 +21,19 @@ function Seen() {
     selectedGenre,
     sortConfig,
     allMovies,
+    allSeries,
     displayCount,
     hasCachedData,
   } = useSyncExternalStore(seenStore.subscribe, seenStore.getState);
 
-  const setActiveTab = (val: "movies" | "series") => seenStore.setState({ activeTab: val });
+  const setActiveTab = (val: "movies" | "series") => {
+    seenStore.setState({ activeTab: val, selectedGenre: "", displayCount: 24 });
+  };
   const setSearchQuery = (val: string) => seenStore.setState({ searchQuery: val });
   const setSelectedGenre = (val: string) => seenStore.setState({ selectedGenre: val });
   const setSortConfig = (val: { field: string; direction: "asc" | "desc" }) => seenStore.setState({ sortConfig: val });
   const setAllMovies = (val: Movie[]) => seenStore.setState({ allMovies: val, hasCachedData: true });
+  const setAllSeries = (val: TVShow[]) => seenStore.setState({ allSeries: val, hasCachedData: true });
   const setDisplayCount = (val: number | ((prev: number) => number)) => {
     if (typeof val === "function") {
       seenStore.setState({ displayCount: val(seenStore.getState().displayCount) });
@@ -69,6 +73,35 @@ function Seen() {
     return () => unsubscribe();
   }, [sortConfig]);
 
+  // Fetch all series from Firestore
+  useEffect(() => {
+    const q = query(
+      collection(db, "tvshows"),
+      orderBy(sortConfig.field, sortConfig.direction),
+    );
+
+    const unsubscribe = onSnapshot(
+      q,
+      (snapshot) => {
+        const seriesList = snapshot.docs.map((doc) => {
+          const data = doc.data() as TVShow;
+          return {
+            ...data,
+            status: data.status || "Unknown",
+            imdbID: doc.id,
+            Year: data.Year ? data.Year.split("-")[0] : "N/A",
+          };
+        });
+        setAllSeries(seriesList);
+      },
+      (error) => {
+        console.error("Error fetching tvshows:", error);
+      },
+    );
+
+    return () => unsubscribe();
+  }, [sortConfig]);
+
   // Save scroll position when unmounting
   useEffect(() => {
     return () => {
@@ -92,36 +125,61 @@ function Seen() {
     };
   }, [allMovies]);
 
-  const seriesStats = { totalEpisodes: 0, months: 0, days: 0, hours: 0 };
+  const seriesStats = useMemo(() => {
+    const totalEpisodes = allSeries.reduce(
+      (acc, s) =>
+        acc +
+        (s.watchedEpisodesCount ??
+          (s.watchedEpisodes ? Object.keys(s.watchedEpisodes).length : 0)),
+      0,
+    );
 
-  // Filter movies (Client-side)
-  const filteredMovies = useMemo(() => {
-    return allMovies.filter((movie) => {
-      const matchesSearch = movie.Title.toLowerCase().includes(
+    const totalSeconds = allSeries.reduce((acc, s) => {
+      const count =
+        s.watchedEpisodesCount ??
+        (s.watchedEpisodes ? Object.keys(s.watchedEpisodes).length : 0);
+      const epSec = Number(s.Runtime) > 0 ? Number(s.Runtime) : 2700; // default 45m
+      return acc + count * epSec;
+    }, 0);
+
+    return {
+      totalEpisodes,
+      months: Math.floor(totalSeconds / 2592000),
+      days: Math.floor((totalSeconds % 2592000) / 86400),
+      hours: Math.floor((totalSeconds % 86400) / 3600),
+    };
+  }, [allSeries]);
+
+  const currentList = activeTab === "movies" ? allMovies : allSeries;
+
+  // Filter items (Client-side)
+  const filteredItems = useMemo(() => {
+    return currentList.filter((item) => {
+      const matchesSearch = item.Title.toLowerCase().includes(
         searchQuery.toLowerCase(),
       );
       const matchesGenre =
         selectedGenre === "" ||
-        (movie.Genres && movie.Genres.includes(selectedGenre));
+        (item.Genres && item.Genres.includes(selectedGenre));
       return matchesSearch && matchesGenre;
     });
-  }, [allMovies, searchQuery, selectedGenre]);
+  }, [currentList, searchQuery, selectedGenre]);
 
   // Infinite Scroll logic (Client-side)
-  const visibleMovies = useMemo(() => {
-    return filteredMovies.slice(0, displayCount);
-  }, [filteredMovies, displayCount]);
+  const visibleItems = useMemo(() => {
+    return filteredItems.slice(0, displayCount);
+  }, [filteredItems, displayCount]);
 
-  // Restore scroll position when cached/loaded movies are rendered
+  // Restore scroll position when cached/loaded items are rendered
   useEffect(() => {
     const cachedState = seenStore.getState();
-    if (cachedState.hasCachedData && cachedState.scrollY > 0 && visibleMovies.length > 0) {
+    if (cachedState.hasCachedData && cachedState.scrollY > 0 && visibleItems.length > 0) {
       const timer = setTimeout(() => {
         window.scrollTo(0, cachedState.scrollY);
       }, 100);
       return () => clearTimeout(timer);
     }
-  }, [visibleMovies]);
+  }, [visibleItems]);
 
   const lastElementRef = useCallback(
     (node: HTMLDivElement | null) => {
@@ -129,20 +187,20 @@ function Seen() {
       if (observer.current) observer.current.disconnect();
 
       observer.current = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting && displayCount < filteredMovies.length) {
+        if (entries[0].isIntersecting && displayCount < filteredItems.length) {
           setDisplayCount((prev) => prev + 24); // Increased step for better experience
         }
       });
 
       if (node) observer.current.observe(node);
     },
-    [loading, displayCount, filteredMovies.length],
+    [loading, displayCount, filteredItems.length],
   );
 
   const genres = useMemo(() => {
-    const allGenres = allMovies.flatMap((m) => m.Genres || []);
+    const allGenres = currentList.flatMap((m) => m.Genres || []);
     return Array.from(new Set(allGenres)).sort();
-  }, [allMovies]);
+  }, [currentList]);
 
   return (
     <div className="max-w-7xl mx-auto py-12 px-4 pb-24">
@@ -332,6 +390,27 @@ function Seen() {
         </div>
       </div>
 
+      {/* Series Status Legend (Only for TV Series tab) */}
+      {activeTab === "series" && !loading && visibleItems.length > 0 && (
+        <div className="flex flex-wrap items-center gap-6 text-xs text-zinc-400 mb-8 bg-zinc-900/60 border border-zinc-800/80 px-4 py-3 rounded-lg">
+          <span className="text-[10px] font-black uppercase tracking-widest text-zinc-500">
+            Series Status:
+          </span>
+          <div className="flex items-center gap-2">
+            <span className="w-3 h-3 rounded-full border-2 border-sky-500 bg-sky-500/20"></span>
+            <span className="font-semibold text-zinc-300">Ongoing</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="w-3 h-3 rounded-full border-2 border-purple-500 bg-purple-500/20"></span>
+            <span className="font-semibold text-zinc-300">Ended</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="w-3 h-3 rounded-full border-2 border-red-500 bg-red-500/20"></span>
+            <span className="font-semibold text-zinc-300">Other</span>
+          </div>
+        </div>
+      )}
+
       {/* Content Grid */}
       {loading ? (
         <div className="flex flex-col items-center justify-center py-32 gap-4">
@@ -344,39 +423,32 @@ function Seen() {
             Loading history...
           </p>
         </div>
-      ) : activeTab === "movies" ? (
-        <>
-          {visibleMovies.length > 0 ? (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-x-4 gap-y-12">
-              {visibleMovies.map((movie, index) => (
-                <div
-                  key={movie.imdbID}
-                  ref={
-                    index === visibleMovies.length - 1 ? lastElementRef : null
-                  }
-                >
-                  <MovieCard movie={movie} />
-                </div>
-              ))}
+      ) : visibleItems.length > 0 ? (
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-x-4 gap-y-12">
+          {visibleItems.map((item, index) => (
+            <div
+              key={item.imdbID}
+              ref={index === visibleItems.length - 1 ? lastElementRef : null}
+            >
+              <MovieCard movie={item} isSeenView={true} />
             </div>
-          ) : (
-            <div className="text-center py-32 bg-zinc-900/20 border border-zinc-800 rounded-lg">
-              <div className="flex justify-center mb-6">
-                <MagnifyingGlassIcon className="w-16 h-16 text-zinc-800" />
-              </div>
-              <p className="text-zinc-500 font-medium tracking-widest uppercase text-sm">
-                No titles found matching your criteria
-              </p>
-            </div>
-          )}
-        </>
+          ))}
+        </div>
       ) : (
         <div className="text-center py-32 bg-zinc-900/20 border border-zinc-800 rounded-lg">
-          <div className="flex justify-center mb-6 opacity-20">
-            <TvIcon className="w-16 h-16 text-white" />
+          <div className="flex justify-center mb-6 opacity-30">
+            {activeTab === "movies" ? (
+              <FilmIcon className="w-16 h-16 text-zinc-600" />
+            ) : (
+              <TvIcon className="w-16 h-16 text-zinc-600" />
+            )}
           </div>
           <p className="text-zinc-500 font-medium tracking-widest uppercase text-sm">
-            No TV Series found
+            {searchQuery || selectedGenre
+              ? "No titles found matching your criteria"
+              : activeTab === "movies"
+                ? "No watched movies found"
+                : "No watched TV series found"}
           </p>
         </div>
       )}
