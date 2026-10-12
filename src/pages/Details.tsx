@@ -73,7 +73,7 @@ function Details() {
             { signal: controller.signal },
           ),
           fetch(
-            `https://whatson-api.onrender.com/?imdbId=${id}&api_key=${apiKeyWhatsON}&append_to_response=platforms_links,episodes_details`,
+            `https://whatson-api.onrender.com/?imdbId=${id}&api_key=${apiKeyWhatsON}&append_to_response=platforms_links,episodes_details,original_title`,
             { signal: controller.signal },
           ),
           getDoc(docRef),
@@ -105,7 +105,10 @@ function Details() {
 
         // Resolve series episodes if series
         let allEpisodes: SeriesEpisode[] = [];
-        if (whatsonItem?.episodes_details && whatsonItem.episodes_details.length > 0) {
+        if (
+          whatsonItem?.episodes_details &&
+          whatsonItem.episodes_details.length > 0
+        ) {
           allEpisodes = whatsonItem.episodes_details.map((ep) => ({
             season: ep.season,
             episode: ep.episode,
@@ -122,7 +125,11 @@ function Details() {
         const isSeriesType =
           whatsonItem?.item_type === "tvshow" || omdbData?.Type === "series";
 
-        if (isSeriesType && allEpisodes.length === 0 && omdbData?.totalSeasons) {
+        if (
+          isSeriesType &&
+          allEpisodes.length === 0 &&
+          omdbData?.totalSeasons
+        ) {
           const totalS = parseInt(omdbData.totalSeasons, 10);
           if (totalS > 0 && totalS <= 50) {
             try {
@@ -139,7 +146,11 @@ function Details() {
               }
               const seasonResults = await Promise.all(seasonFetches);
               for (const sr of seasonResults) {
-                if (sr && sr.Response === "True" && Array.isArray(sr.Episodes)) {
+                if (
+                  sr &&
+                  sr.Response === "True" &&
+                  Array.isArray(sr.Episodes)
+                ) {
                   const sNum = parseInt(sr.Season, 10);
                   for (const ep of sr.Episodes) {
                     allEpisodes.push({
@@ -167,8 +178,8 @@ function Details() {
             // Priority: WhatsOn. Integrating Plot and Actors from OMDb if available.
             const hybrid: MovieDetails = {
               Title:
-                (whatsonItem.original_title.toLowerCase() ===
-                whatsonItem.title.toLowerCase()
+                (whatsonItem.original_title?.toLowerCase() ===
+                whatsonItem.title?.toLowerCase()
                   ? whatsonItem.original_title
                   : whatsonItem.original_title +
                     " - (" +
@@ -222,10 +233,18 @@ function Details() {
                   ? String(whatsonItem.seasons_number)
                   : undefined),
             };
-            setMovie({ ...hybrid, whatson: whatsonItem, episodes: allEpisodes });
+            setMovie({
+              ...hybrid,
+              whatson: whatsonItem,
+              episodes: allEpisodes,
+            });
           } else if (omdbData) {
             // Fallback: OMDb
-            setMovie({ ...omdbData, whatson: undefined, episodes: allEpisodes });
+            setMovie({
+              ...omdbData,
+              whatson: undefined,
+              episodes: allEpisodes,
+            });
           } else {
             setError("Title not found.");
           }
@@ -306,11 +325,14 @@ function Details() {
     const eps = movie.episodes || [];
     const totalEpisodesCount = eps.length > 0 ? eps.length : watchedKeys.length;
 
-    const seasonsMap = eps.reduce((acc, ep) => {
-      if (!acc[ep.season]) acc[ep.season] = [];
-      acc[ep.season].push(ep);
-      return acc;
-    }, {} as Record<number, SeriesEpisode[]>);
+    const seasonsMap = eps.reduce(
+      (acc, ep) => {
+        if (!acc[ep.season]) acc[ep.season] = [];
+        acc[ep.season].push(ep);
+        return acc;
+      },
+      {} as Record<number, SeriesEpisode[]>,
+    );
 
     const watchedSeasons: number[] = [];
     Object.entries(seasonsMap).forEach(([sNum, sEps]) => {
@@ -324,7 +346,9 @@ function Details() {
 
     const seasonsCount =
       movie.whatson?.seasons_number ||
-      (movie.totalSeasons ? parseInt(movie.totalSeasons, 10) : Object.keys(seasonsMap).length) ||
+      (movie.totalSeasons
+        ? parseInt(movie.totalSeasons, 10)
+        : Object.keys(seasonsMap).length) ||
       1;
 
     const getResolvedStatus = (): string => {
@@ -406,9 +430,7 @@ function Details() {
     }
   };
 
-  const handleToggleSeason = async (
-    seasonEpisodes: SeriesEpisode[],
-  ) => {
+  const handleToggleSeason = async (seasonEpisodes: SeriesEpisode[]) => {
     if (!movie || !id || toggling) return;
     setToggling(true);
     const allSeasonWatched =
@@ -629,7 +651,8 @@ function Details() {
                 const eps = movie.episodes || [];
                 const watchedCount = Object.keys(watchedEpisodes).length;
                 const totalCount = eps.length;
-                const isAllWatched = totalCount > 0 && watchedCount >= totalCount;
+                const isAllWatched =
+                  totalCount > 0 && watchedCount >= totalCount;
                 const isPartiallyWatched = watchedCount > 0 && !isAllWatched;
 
                 return (
@@ -664,12 +687,16 @@ function Details() {
                     ) : isAllWatched ? (
                       <>
                         <CheckCircleIconSolid className="w-5 h-5 text-green-500" />
-                        <span>Completed ({watchedCount}/{totalCount})</span>
+                        <span>
+                          Completed ({watchedCount}/{totalCount})
+                        </span>
                       </>
                     ) : isPartiallyWatched ? (
                       <>
                         <CheckCircleIconSolid className="w-5 h-5 text-amber-500" />
-                        <span>Seen ({watchedCount}/{totalCount}) • Mark all</span>
+                        <span>
+                          Seen ({watchedCount}/{totalCount}) • Mark all
+                        </span>
                       </>
                     ) : (
                       <>
@@ -893,7 +920,8 @@ function Details() {
                         Series Structure & Progress
                       </h4>
                       <p className="text-[11px] text-zinc-500 mt-1">
-                        Select seasons or individual episodes to track your watch history
+                        Select seasons or individual episodes to track your
+                        watch history
                       </p>
                     </div>
                     {(() => {
@@ -936,7 +964,8 @@ function Details() {
                       .sort(([aS], [bS]) => Number(aS) - Number(bS))
                       .map(([season, episodes]) => {
                         const seasonWatchedCount = episodes.filter(
-                          (ep) => !!watchedEpisodes[`${ep.season}_${ep.episode}`],
+                          (ep) =>
+                            !!watchedEpisodes[`${ep.season}_${ep.episode}`],
                         ).length;
                         const isSeasonComplete =
                           episodes.length > 0 &&
@@ -972,11 +1001,13 @@ function Details() {
                                   </span>
                                   {isSeasonComplete ? (
                                     <span className="ml-3 text-[10px] font-black uppercase text-green-400 bg-green-500/10 border border-green-500/20 px-2 py-0.5 rounded inline-flex items-center gap-1">
-                                      <CheckCircleIconSolid className="w-3 h-3" /> Completed
+                                      <CheckCircleIconSolid className="w-3 h-3" />{" "}
+                                      Completed
                                     </span>
                                   ) : seasonWatchedCount > 0 ? (
                                     <span className="ml-3 text-[10px] font-black uppercase text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded">
-                                      {seasonWatchedCount}/{episodes.length} seen
+                                      {seasonWatchedCount}/{episodes.length}{" "}
+                                      seen
                                     </span>
                                   ) : (
                                     <span className="ml-3 text-[10px] text-zinc-500 font-bold uppercase tracking-widest">
@@ -1000,7 +1031,9 @@ function Details() {
                                       : "bg-green-600/10 text-green-400 hover:bg-green-600 hover:text-white border border-green-600/30"
                                   }`}
                                 >
-                                  {isSeasonComplete ? "Unmark Season" : "Mark Season"}
+                                  {isSeasonComplete
+                                    ? "Unmark Season"
+                                    : "Mark Season"}
                                 </button>
                                 <div className="text-zinc-600 group-open/season:rotate-180 transition-transform">
                                   <svg
@@ -1045,12 +1078,17 @@ function Details() {
                                     .sort((a, b) => a.episode - b.episode)
                                     .map((ep) => {
                                       const key = `${ep.season}_${ep.episode}`;
-                                      const isEpWatched = !!watchedEpisodes[key];
-                                      const epWatchedInfo = watchedEpisodes[key];
+                                      const isEpWatched =
+                                        !!watchedEpisodes[key];
+                                      const epWatchedInfo =
+                                        watchedEpisodes[key];
 
                                       return (
                                         <tr
-                                          key={ep.id || `${ep.season}-${ep.episode}`}
+                                          key={
+                                            ep.id ||
+                                            `${ep.season}-${ep.episode}`
+                                          }
                                           className={`hover:bg-zinc-900/60 transition-colors group/ep ${
                                             isEpWatched ? "bg-green-950/15" : ""
                                           }`}
@@ -1058,9 +1096,15 @@ function Details() {
                                           <td className="py-3">
                                             <button
                                               type="button"
-                                              onClick={() => handleToggleEpisode(ep)}
+                                              onClick={() =>
+                                                handleToggleEpisode(ep)
+                                              }
                                               disabled={toggling}
-                                              title={isEpWatched ? "Mark unseen" : "Mark seen"}
+                                              title={
+                                                isEpWatched
+                                                  ? "Mark unseen"
+                                                  : "Mark seen"
+                                              }
                                               className="cursor-pointer transition-transform active:scale-90"
                                             >
                                               {isEpWatched ? (
@@ -1091,14 +1135,15 @@ function Details() {
                                             >
                                               {ep.title}
                                             </span>
-                                            {isEpWatched && epWatchedInfo?.watchedAt && (
-                                              <span className="block text-[9px] text-zinc-500 font-medium">
-                                                Seen on{" "}
-                                                {new Date(
-                                                  epWatchedInfo.watchedAt,
-                                                ).toLocaleDateString()}
-                                              </span>
-                                            )}
+                                            {isEpWatched &&
+                                              epWatchedInfo?.watchedAt && (
+                                                <span className="block text-[9px] text-zinc-500 font-medium">
+                                                  Seen on{" "}
+                                                  {new Date(
+                                                    epWatchedInfo.watchedAt,
+                                                  ).toLocaleDateString()}
+                                                </span>
+                                              )}
                                           </td>
                                           <td className="py-3 text-right">
                                             <div className="flex items-center justify-end gap-1.5">
@@ -1113,7 +1158,9 @@ function Details() {
                                           <td className="py-3 text-right">
                                             <button
                                               type="button"
-                                              onClick={() => handleToggleEpisode(ep)}
+                                              onClick={() =>
+                                                handleToggleEpisode(ep)
+                                              }
                                               disabled={toggling}
                                               className={`px-2.5 py-1 rounded text-[10px] font-bold uppercase tracking-wider transition-all cursor-pointer ${
                                                 isEpWatched
@@ -1121,7 +1168,9 @@ function Details() {
                                                   : "bg-zinc-800 text-zinc-400 border border-zinc-700 hover:bg-green-600 hover:text-white hover:border-green-600"
                                               }`}
                                             >
-                                              {isEpWatched ? "Seen ✓" : "+ Mark"}
+                                              {isEpWatched
+                                                ? "Seen ✓"
+                                                : "+ Mark"}
                                             </button>
                                           </td>
                                         </tr>
@@ -1137,7 +1186,8 @@ function Details() {
                 </div>
               ) : (
                 <div className="pt-6 border-t border-zinc-800 text-zinc-500 text-xs">
-                  No individual episodes structure available for this series. You can still mark it as seen using the button on the left.
+                  No individual episodes structure available for this series.
+                  You can still mark it as seen using the button on the left.
                 </div>
               )}
             </section>
