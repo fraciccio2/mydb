@@ -1,4 +1,10 @@
-import { useState, useRef, useCallback, useEffect, useSyncExternalStore } from "react";
+import {
+  useState,
+  useRef,
+  useCallback,
+  useEffect,
+  useSyncExternalStore,
+} from "react";
 import {
   MagnifyingGlassIcon,
   ChevronDownIcon,
@@ -37,10 +43,13 @@ function Search() {
       searchStore.setState({ movies: val });
     }
   };
-  const setTotalResults = (val: number) => searchStore.setState({ totalResults: val });
+  const setTotalResults = (val: number) =>
+    searchStore.setState({ totalResults: val });
   const setPage = (val: number) => searchStore.setState({ page: val });
-  const setIsDiscovery = (val: boolean) => searchStore.setState({ isDiscovery: val });
-  const setSource = (val: "whatson" | "omdb") => searchStore.setState({ source: val });
+  const setIsDiscovery = (val: boolean) =>
+    searchStore.setState({ isDiscovery: val });
+  const setSource = (val: "whatson" | "omdb") =>
+    searchStore.setState({ source: val });
   const setError = (val: string) => searchStore.setState({ error: val });
 
   const [loading, setLoading] = useState(false);
@@ -75,7 +84,7 @@ function Search() {
         if (currentSource === "whatson") {
           const currentType = type === "series" ? "tvshow" : type;
 
-          let url = `https://whatson-api.onrender.com/?page=${pageNum}&api_key=${apiKeyWhatsON}`;
+          let url = `https://whatson-api.onrender.com/?page=${pageNum}&api_key=${apiKeyWhatsON}&append_to_response=original_title`;
           if (currentTitle) url += `&title=${encodeURIComponent(currentTitle)}`;
           if (currentType) url += `&item_type=${currentType}`;
           if (genres) url += `&genres=${encodeURIComponent(genres)}`;
@@ -87,7 +96,7 @@ function Search() {
             const mappedMovies: Movie[] = data.results.map((item) => ({
               Poster: item.image,
               Title:
-                item.original_title.toLowerCase() === item.title.toLowerCase()
+                item.original_title?.toLowerCase() === item.title?.toLowerCase()
                   ? item.original_title
                   : item.original_title + " - (" + item.title + ")",
               Type: item.item_type === "tvshow" ? "series" : item.item_type,
@@ -172,7 +181,11 @@ function Search() {
   // Restore scroll position when cached movies are rendered
   useEffect(() => {
     const cachedState = searchStore.getState();
-    if (cachedState.hasCachedData && cachedState.scrollY > 0 && movies.length > 0) {
+    if (
+      cachedState.hasCachedData &&
+      cachedState.scrollY > 0 &&
+      movies.length > 0
+    ) {
       const timer = setTimeout(() => {
         window.scrollTo(0, cachedState.scrollY);
       }, 100);
