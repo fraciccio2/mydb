@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { doc, getDoc, setDoc, deleteDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import { config } from "../config";
+import { useAuth } from "../context/useAuth";
 import {
   ArrowLeftIcon,
   CalendarIcon,
@@ -36,6 +37,7 @@ import type {
 function Details() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [movie, setMovie] = useState<HybridMovieDetails | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -65,8 +67,8 @@ function Details() {
         const apiKeyWhatsON = config.whatsonApiKey;
 
         // Check if seen in Firestore
-        const docRef = doc(db, "movies", id);
-        const tvDocRef = doc(db, "tvshows", id);
+        const docRef = user ? doc(db, "users", user.uid, "movies", id) : null;
+        const tvDocRef = user ? doc(db, "users", user.uid, "tvshows", id) : null;
 
         const [omdbRes, whatsonRes, seenDoc, seenTvDoc] = await Promise.all([
           fetch(
@@ -77,15 +79,15 @@ function Details() {
             `https://whatson-api.onrender.com/?imdbId=${id}&api_key=${apiKeyWhatsON}&append_to_response=platforms_links,episodes_details,original_title`,
             { signal: controller.signal },
           ),
-          getDoc(docRef),
-          getDoc(tvDocRef),
+          docRef ? getDoc(docRef) : Promise.resolve(null),
+          tvDocRef ? getDoc(tvDocRef) : Promise.resolve(null),
         ]);
 
-        if (seenDoc.exists()) {
+        if (seenDoc && seenDoc.exists()) {
           setIsSeen(true);
         }
 
-        if (seenTvDoc.exists()) {
+        if (seenTvDoc && seenTvDoc.exists()) {
           const tvData = seenTvDoc.data() as TVShow;
           const episodesSaved = tvData.watchedEpisodes || {};
           setWatchedEpisodes(episodesSaved);
@@ -268,7 +270,7 @@ function Details() {
       isMounted = false;
       controller.abort();
     };
-  }, [id]);
+  }, [id, user]);
 
   const fromMinStringToSecond = (runtime: string): number => {
     const minutes = Number(runtime.replace(" min", ""));
@@ -276,11 +278,11 @@ function Details() {
   };
 
   const handleToggleMovieSeen = async () => {
-    if (!movie || !id || toggling) return;
+    if (!movie || !id || toggling || !user) return;
     setToggling(true);
 
     try {
-      const docRef = doc(db, "movies", id);
+      const docRef = doc(db, "users", user.uid, "movies", id);
 
       if (isSeen) {
         await deleteDoc(docRef);
@@ -312,8 +314,8 @@ function Details() {
   const saveTvShowToFirestore = async (
     updatedEpisodes: Record<string, WatchedEpisodeInfo>,
   ) => {
-    if (!movie || !id) return;
-    const tvDocRef = doc(db, "tvshows", id);
+    if (!movie || !id || !user) return;
+    const tvDocRef = doc(db, "users", user.uid, "tvshows", id);
     const watchedKeys = Object.keys(updatedEpisodes);
 
     if (watchedKeys.length === 0) {
@@ -408,7 +410,7 @@ function Details() {
   };
 
   const handleToggleEpisode = async (ep: SeriesEpisode) => {
-    if (!movie || !id || toggling) return;
+    if (!movie || !id || toggling || !user) return;
     setToggling(true);
     const key = `${ep.season}_${ep.episode}`;
     const next = { ...watchedEpisodes };
@@ -432,7 +434,7 @@ function Details() {
   };
 
   const handleToggleSeason = async (seasonEpisodes: SeriesEpisode[]) => {
-    if (!movie || !id || toggling) return;
+    if (!movie || !id || toggling || !user) return;
     setToggling(true);
     const allSeasonWatched =
       seasonEpisodes.length > 0 &&
@@ -470,7 +472,7 @@ function Details() {
   };
 
   const handleToggleAllSeries = async () => {
-    if (!movie || !id || toggling) return;
+    if (!movie || !id || toggling || !user) return;
     setToggling(true);
     const eps = movie.episodes || [];
 
