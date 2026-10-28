@@ -9,7 +9,7 @@ Questo documento traccia le funzionalità pianificate per l'applicazione **MYDB*
 | Priorità | Fase | Funzionalità | Stato |
 | :--- | :--- | :--- | :---: |
 | **P1** | **Fondamenta & Sicurezza** | Pulizia Tecnica (Variabili d'ambiente `.env`) | ✅ Completato |
-| **P1** | **Fondamenta & Sicurezza** | Autenticazione Utente (Firebase Auth) | ⏳ Pianificato |
+| **P1** | **Fondamenta & Sicurezza** | Autenticazione Utente (Firebase Auth) | ✅ Completato |
 | **P2** | **Core Tracking** | Watchlist ("Da Vedere") | ⏳ Pianificato |
 | **P2** | **Core Tracking** | "Prossimo Episodio" / Continua a Guardare | ⏳ Pianificato |
 | **P2** | **Mobile Experience** | Offline Caching & PWA completa | ⏳ Pianificato |
@@ -41,13 +41,15 @@ Questo documento traccia le funzionalità pianificate per l'applicazione **MYDB*
 - [x] Aggiornare il workflow GitHub Actions `.github/workflows/deploy.yml` per iniettare i secrets/variabili durante la build.
 
 #### 2. Autenticazione Utente (Firebase Auth)
-- [ ] Integrazione del modulo Firebase Authentication (Google Sign-In e opzionalmente Email/Password).
-- [ ] Ristrutturazione Firestore da collezioni globali a percorsi dedicati all'utente:
+- [x] Integrazione del modulo Firebase Authentication con Google Sign-In (`signInWithPopup`).
+- [x] Ristrutturazione Firestore da collezioni globali a percorsi dedicati all'utente:
   - `users/{uid}/movies/{imdbID}`
   - `users/{uid}/tvshows/{imdbID}`
   - `users/{uid}/watchlist/{imdbID}`
-- [ ] UI header: Pulsante di Login / Profilo utente con avatar e Logout in `App.tsx`.
-- [ ] Protezione delle rotte e sincronizzazione dello store locale per utente attivo.
+- [x] Script di migrazione automatica dei dati storici sotto l'account utente.
+- [x] UI header: Profilo utente con avatar e pulsante Logout in `App.tsx`.
+- [x] Protezione totale delle schermate: utente non loggato vede solo il Login.
+- [x] Sessione permanente: `browserLocalPersistence` (la sessione non scade mai fino al logout esplicito).
 
 ---
 

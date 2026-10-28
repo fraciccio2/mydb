@@ -13,6 +13,7 @@ import {
   TvIcon,
 } from "@heroicons/react/24/outline";
 import { seenStore } from "../store/seenStore";
+import { useAuth } from "../context/useAuth";
 
 function Seen() {
   const {
@@ -44,12 +45,15 @@ function Seen() {
 
   const [loading, setLoading] = useState(!hasCachedData);
 
+  const { user } = useAuth();
   const observer = useRef<IntersectionObserver | null>(null);
 
   // Fetch all movies from Firestore
   useEffect(() => {
+
+    if (!user) return;
     const q = query(
-      collection(db, "movies"),
+      collection(db, "users", user.uid, "movies"),
       orderBy(sortConfig.field, sortConfig.direction),
     );
 
@@ -71,12 +75,14 @@ function Seen() {
     );
 
     return () => unsubscribe();
-  }, [sortConfig]);
+  }, [sortConfig, user]);
 
   // Fetch all series from Firestore
   useEffect(() => {
+
+    if (!user) return;
     const q = query(
-      collection(db, "tvshows"),
+      collection(db, "users", user.uid, "tvshows"),
       orderBy(sortConfig.field, sortConfig.direction),
     );
 
@@ -100,10 +106,11 @@ function Seen() {
     );
 
     return () => unsubscribe();
-  }, [sortConfig]);
+  }, [sortConfig, user]);
 
   // Save scroll position when unmounting
   useEffect(() => {
+
     return () => {
       seenStore.setState({ scrollY: window.scrollY });
     };
@@ -172,6 +179,7 @@ function Seen() {
 
   // Restore scroll position when cached/loaded items are rendered
   useEffect(() => {
+
     const cachedState = seenStore.getState();
     if (cachedState.hasCachedData && cachedState.scrollY > 0 && visibleItems.length > 0) {
       const timer = setTimeout(() => {
