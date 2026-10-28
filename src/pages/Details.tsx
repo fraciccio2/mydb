@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { doc, getDoc, setDoc, deleteDoc } from "firebase/firestore";
 import { db } from "../firebase";
+import { config } from "../config";
 import {
   ArrowLeftIcon,
   CalendarIcon,
@@ -60,8 +61,8 @@ function Details() {
       setIsSeen(false);
 
       try {
-        const apiKeyOMDB = "704c9e59";
-        const apiKeyWhatsON = "d0b8b76f-d505-4d36-82ea-e8f968a2dbd1";
+        const apiKeyOMDB = config.omdbApiKey;
+        const apiKeyWhatsON = config.whatsonApiKey;
 
         // Check if seen in Firestore
         const docRef = doc(db, "movies", id);

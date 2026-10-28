@@ -18,6 +18,7 @@ import type {
 import MovieCard from "../components/MovieCard";
 import * as React from "react";
 import { searchStore } from "../store/searchStore";
+import { config } from "../config";
 
 function Search() {
   const {
@@ -70,8 +71,8 @@ function Search() {
       setError("");
 
       try {
-        const apiKeyWhatsON = "d0b8b76f-d505-4d36-82ea-e8f968a2dbd1";
-        const apiKeyOMDB = "704c9e59";
+        const apiKeyWhatsON = config.whatsonApiKey;
+        const apiKeyOMDB = config.omdbApiKey;
 
         const currentTitle = searchTitle !== undefined ? searchTitle : title;
         let currentSource = isNewSearch ? "whatson" : source;
