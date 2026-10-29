@@ -5,6 +5,7 @@ import { VitePWA } from "vite-plugin-pwa";
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: process.env.NODE_ENV === "production" ? "/mydb/" : "/",
   plugins: [
     react(),
     tailwindcss(),
@@ -19,8 +20,6 @@ export default defineConfig({
         background_color: "#09090b",
         display: "standalone",
         orientation: "portrait",
-        scope: "/",
-        start_url: "/",
         icons: [
           {
             src: "logo.svg",
