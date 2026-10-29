@@ -36,7 +36,7 @@ function MovieCard({ movie, isSeenView = false }: MovieCardProps) {
   const getTypeLabel = () => {
     switch (movie.Type) {
       case "movie":
-        return { label: "Film", icon: <FilmIcon className="w-3 h-3" /> };
+        return { label: "Movie", icon: <FilmIcon className="w-3 h-3" /> };
       case "series":
         return { label: "TV series", icon: <TvIcon className="w-3 h-3" /> };
       default:
@@ -101,7 +101,7 @@ function MovieCard({ movie, isSeenView = false }: MovieCardProps) {
       </div>
 
       {/* Content */}
-      <div className="p-4 flex flex-col flex-1 bg-zinc-900">
+      <div className="p-3 sm:p-4 flex flex-col flex-1 bg-zinc-900">
         <div className="flex-1">
           <h3
             className="font-bold text-white leading-snug line-clamp-2 group-hover:text-red-500 transition-colors mb-2 text-sm"
@@ -143,9 +143,10 @@ function MovieCard({ movie, isSeenView = false }: MovieCardProps) {
           </div>
         </div>
 
-        <div className="mt-4 flex items-center justify-end border-t border-zinc-800/50 pt-3">
-          <span className="text-[10px] font-black uppercase tracking-widest text-zinc-500 group-hover:text-red-500 transition-colors">
-            Details →
+        <div className="mt-3 flex items-center justify-end border-t border-zinc-800/80 pt-2">
+          <span className="inline-flex items-center gap-1.5 text-[10px] font-black uppercase tracking-wider text-zinc-400 group-hover:text-white bg-zinc-800/60 group-hover:bg-red-600 border border-zinc-700/50 group-hover:border-red-600 px-2.5 py-1 rounded-md transition-all duration-200">
+            <span>Details</span>
+            <span className="transition-transform duration-200 group-hover:translate-x-0.5">→</span>
           </span>
         </div>
       </div>

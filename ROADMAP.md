@@ -13,7 +13,7 @@ Questo documento traccia le funzionalità pianificate per l'applicazione **MYDB*
 | **P2** | **Core Tracking** | Watchlist ("Da Vedere") | ⏳ Pianificato |
 | **P2** | **Core Tracking** | "Prossimo Episodio" / Continua a Guardare | ⏳ Pianificato |
 | **P2** | **Mobile Experience** | Offline Caching & PWA completa | ⏳ Pianificato |
-| **P3** | **Discovery & Filtri** | Sezione Trending & Novità in Home | ⏳ Pianificato |
+| **P3** | **Discovery & Filtri** | Sezione Trending & Novità in Home | ✅ Completato |
 | **P3** | **Discovery & Filtri** | Filtro per Piattaforme Streaming (Netflix, Prime, ecc.) | ⏳ Pianificato |
 | **P4** | **Analytics & Gamification** | Dashboard Visuale (Grafici & Statistiche avanzate) | ⏳ Pianificato |
 | **P4** | **Analytics & Gamification** | Movie Challenge Annuale (es. "50 film nel 2026") | ⏳ Pianificato |
@@ -81,10 +81,12 @@ Questo documento traccia le funzionalità pianificate per l'applicazione **MYDB*
 ### 🟡 PRIORITÀ 3 — Discovery & Filtri Intelligenti
 
 #### 6. Sezione Trending & Novità in Home
-- [ ] Riorganizzazione della landing page con sezioni curate ad alta attrazione visiva:
+- [x] Riorganizzazione della landing page con sezioni curate ad alta attrazione visiva:
   - *Trending Now* (Film e serie più popolari da WhatsOn API).
   - *Ultime Uscite* al cinema o in streaming.
-- [ ] Banner in evidenza (Hero section) con il titolo del momento e pulsanti rapidi ("Dettagli", "+ Watchlist").
+- [x] Banner in evidenza (Hero section) con il titolo top del momento, backdrop widescreen, badge rating e pulsanti di azione rapida.
+- [x] Barra di ricerca rapida in Home con reindirizzamento istantaneo a `/search?q=...`.
+- [x] Cache dello stato in `homeStore` per caricamento immediato e zero chiamate di rete ridondanti.
 
 #### 7. Filtro per Piattaforme Streaming
 - [ ] Sfruttare i metadati `platforms_links` già forniti dall'API WhatsOn:

@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { Routes, Route, Link, useLocation } from "react-router-dom";
+import Home from "./pages/Home";
 import Search from "./pages/Search";
 import Seen from "./pages/Seen";
 import Details from "./pages/Details";
@@ -69,33 +70,39 @@ function App() {
 
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-100 font-sans">
-      <nav className="bg-zinc-950/95 border-b border-zinc-900 sticky top-0 z-10 shadow-lg backdrop-blur-sm">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex justify-between items-center h-16">
+      <nav className="bg-zinc-950/95 border-b border-zinc-900 sticky top-0 z-50 shadow-lg backdrop-blur-sm">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6">
+          <div className="flex justify-between items-center h-16 gap-2 sm:gap-4">
             {/* Left: Brand & Navigation */}
-            <div className="flex items-center gap-8">
-              <Link to="/" className="flex items-center gap-2 group">
+            <div className="flex items-center gap-3 sm:gap-6 md:gap-8 min-w-0">
+              <Link to="/" className="flex items-center gap-1.5 sm:gap-2 group shrink-0">
                 <img
                   src={logo}
                   alt="MYDB Logo"
-                  className="h-8 w-auto transition-transform group-hover:scale-105"
+                  className="h-7 sm:h-8 w-auto transition-transform group-hover:scale-105"
                 />
-                <span className="font-black text-2xl tracking-tighter text-red-600">
+                <span className="font-black text-xl sm:text-2xl tracking-tighter text-red-600">
                   MYDB
                 </span>
               </Link>
 
               {/* Navigation Links */}
-              <div className="flex gap-6 h-16">
+              <div className="flex items-center gap-2 sm:gap-4 md:gap-6 h-16">
                 <Link
                   to="/"
-                  className={`flex items-center px-1 pt-1 text-sm font-bold transition-colors ${isActive("/")}`}
+                  className={`flex items-center px-1.5 sm:px-2 pt-1 text-xs sm:text-sm font-bold transition-colors shrink-0 ${isActive("/")}`}
+                >
+                  Home
+                </Link>
+                <Link
+                  to="/search"
+                  className={`flex items-center px-1.5 sm:px-2 pt-1 text-xs sm:text-sm font-bold transition-colors shrink-0 ${isActive("/search")}`}
                 >
                   Search
                 </Link>
                 <Link
                   to="/seen"
-                  className={`flex items-center px-1 pt-1 text-sm font-bold transition-colors ${isActive("/seen")}`}
+                  className={`flex items-center px-1.5 sm:px-2 pt-1 text-xs sm:text-sm font-bold transition-colors shrink-0 ${isActive("/seen")}`}
                 >
                   Seen
                 </Link>
@@ -103,11 +110,11 @@ function App() {
             </div>
 
             {/* Right: User Profile Dropdown Menu */}
-            <div className="relative" ref={menuRef}>
+            <div className="relative shrink-0 ml-2 sm:ml-4" ref={menuRef}>
               <button
                 type="button"
                 onClick={() => setIsMenuOpen((prev) => !prev)}
-                className="flex items-center gap-2.5 bg-zinc-900/60 hover:bg-zinc-900 border border-zinc-800/80 hover:border-zinc-700 px-3 py-1.5 rounded-full transition-all cursor-pointer group"
+                className="flex items-center gap-1.5 sm:gap-2.5 bg-zinc-900/60 hover:bg-zinc-900 border border-zinc-800/80 hover:border-zinc-700 p-1 sm:px-3 sm:py-1.5 rounded-full transition-all cursor-pointer group"
                 aria-expanded={isMenuOpen}
                 aria-haspopup="true"
               >
@@ -123,7 +130,7 @@ function App() {
                     {(user.displayName || user.email || "U")[0].toUpperCase()}
                   </div>
                 )}
-                <span className="hidden sm:inline text-xs font-bold text-zinc-300 max-w-[130px] truncate group-hover:text-white">
+                <span className="hidden sm:inline text-xs font-bold text-zinc-300 max-w-32.5 truncate group-hover:text-white">
                   {user.displayName || user.email}
                 </span>
                 <ChevronDownIcon
@@ -167,7 +174,8 @@ function App() {
 
       <main>
         <Routes>
-          <Route path="/" element={<Search />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/search" element={<Search />} />
           <Route path="/seen" element={<Seen />} />
           <Route path="/movie/:id" element={<Details />} />
         </Routes>
