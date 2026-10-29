@@ -23,6 +23,7 @@ import MovieCard from "../components/MovieCard";
 import { searchStore } from "../store/searchStore";
 import { config } from "../config";
 import { fetchWhatsOn } from "../services/whatson";
+import { useOnlineStatus } from "../hooks/useOnlineStatus";
 
 function Search() {
   const {
@@ -64,6 +65,7 @@ function Search() {
   const [hasSearched, setHasSearched] = useState(
     Boolean(hasCachedData && movies.length > 0),
   );
+  const isOnline = useOnlineStatus();
   const [isScrolledPastForm, setIsScrolledPastForm] = useState(false);
 
   const formRef = useRef<HTMLFormElement>(null);
@@ -289,6 +291,10 @@ function Search() {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!isOnline) {
+      setError("You are offline. Reconnect to the internet to search new titles.");
+      return;
+    }
     if (!title.trim() && !type && !genres && !platform) return;
     fetchMovies(1, true).catch((e) => console.error(e));
   };
@@ -482,7 +488,7 @@ function Search() {
             </button>
             <button
               type="submit"
-              disabled={loading}
+              disabled={loading || !isOnline}
               className="px-8 py-3 rounded-xl bg-red-600 hover:bg-red-700 disabled:opacity-50 text-white font-black text-xs uppercase tracking-widest transition-all shadow-lg shadow-red-600/20 active:scale-95 flex items-center justify-center gap-2 cursor-pointer"
             >
               {loading ? (
@@ -508,7 +514,7 @@ function Search() {
               ) : (
                 <>
                   <MagnifyingGlassIcon className="w-4 h-4" />
-                  <span>Search Now</span>
+                  <span>{!isOnline ? "Offline" : "Search Now"}</span>
                 </>
               )}
             </button>
