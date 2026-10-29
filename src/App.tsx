@@ -3,6 +3,7 @@ import { Routes, Route, Link, useLocation } from "react-router-dom";
 import Home from "./pages/Home";
 import Search from "./pages/Search";
 import Seen from "./pages/Seen";
+import Watchlist from "./pages/Watchlist";
 import Details from "./pages/Details";
 import Login from "./pages/Login";
 import logo from "./assets/logo.svg";
@@ -11,7 +12,17 @@ import { useOnlineStatus } from "./hooks/useOnlineStatus";
 import {
   ArrowRightStartOnRectangleIcon,
   ChevronDownIcon,
+  HomeIcon,
+  MagnifyingGlassIcon,
+  BookmarkIcon,
+  CheckCircleIcon,
 } from "@heroicons/react/24/outline";
+import {
+  HomeIcon as HomeIconSolid,
+  MagnifyingGlassIcon as MagnifyingGlassIconSolid,
+  BookmarkIcon as BookmarkIconSolid,
+  CheckCircleIcon as CheckCircleIconSolid,
+} from "@heroicons/react/24/solid";
 
 function App() {
   const location = useLocation();
@@ -88,23 +99,29 @@ function App() {
                 </span>
               </Link>
 
-              {/* Navigation Links */}
-              <div className="flex items-center gap-2 sm:gap-4 md:gap-6 h-16">
+              {/* Desktop Navigation Links */}
+              <div className="hidden md:flex items-center gap-6 h-16">
                 <Link
                   to="/"
-                  className={`flex items-center px-1.5 sm:px-2 pt-1 text-xs sm:text-sm font-bold transition-colors shrink-0 ${isActive("/")}`}
+                  className={`flex items-center px-2 pt-1 text-sm font-bold transition-colors shrink-0 ${isActive("/")}`}
                 >
                   Home
                 </Link>
                 <Link
                   to="/search"
-                  className={`flex items-center px-1.5 sm:px-2 pt-1 text-xs sm:text-sm font-bold transition-colors shrink-0 ${isActive("/search")}`}
+                  className={`flex items-center px-2 pt-1 text-sm font-bold transition-colors shrink-0 ${isActive("/search")}`}
                 >
                   Search
                 </Link>
                 <Link
+                  to="/watchlist"
+                  className={`flex items-center px-2 pt-1 text-sm font-bold transition-colors shrink-0 ${isActive("/watchlist")}`}
+                >
+                  Watchlist
+                </Link>
+                <Link
                   to="/seen"
-                  className={`flex items-center px-1.5 sm:px-2 pt-1 text-xs sm:text-sm font-bold transition-colors shrink-0 ${isActive("/seen")}`}
+                  className={`flex items-center px-2 pt-1 text-sm font-bold transition-colors shrink-0 ${isActive("/seen")}`}
                 >
                   Seen
                 </Link>
@@ -182,14 +199,100 @@ function App() {
         </div>
       )}
 
-      <main>
+      <main className="pb-20 md:pb-0">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/search" element={<Search />} />
+          <Route path="/watchlist" element={<Watchlist />} />
           <Route path="/seen" element={<Seen />} />
           <Route path="/movie/:id" element={<Details />} />
         </Routes>
       </main>
+
+      {/* Mobile Bottom Navigation Bar */}
+      <nav
+        aria-label="Mobile Navigation"
+        className="md:hidden fixed bottom-0 inset-x-0 z-50 bg-zinc-950/95 backdrop-blur-xl border-t border-zinc-900/90 shadow-2xl transition-all"
+        style={{ paddingBottom: "max(0.5rem, env(safe-area-inset-bottom))" }}
+      >
+        <div className="grid grid-cols-4 max-w-md mx-auto pt-1.5 pb-1">
+          {/* Home */}
+          <Link
+            to="/"
+            className={`flex flex-col items-center justify-center py-1 transition-colors group cursor-pointer ${
+              location.pathname === "/"
+                ? "text-red-500 font-bold"
+                : "text-zinc-500 hover:text-zinc-300 font-medium"
+            }`}
+          >
+            {location.pathname === "/" ? (
+              <HomeIconSolid className="w-5 h-5 mb-1 transition-transform group-active:scale-90" />
+            ) : (
+              <HomeIcon className="w-5 h-5 mb-1 transition-transform group-active:scale-90" />
+            )}
+            <span className="text-[10px] tracking-wider uppercase leading-tight">
+              Home
+            </span>
+          </Link>
+
+          {/* Search */}
+          <Link
+            to="/search"
+            className={`flex flex-col items-center justify-center py-1 transition-colors group cursor-pointer ${
+              location.pathname === "/search"
+                ? "text-red-500 font-bold"
+                : "text-zinc-500 hover:text-zinc-300 font-medium"
+            }`}
+          >
+            {location.pathname === "/search" ? (
+              <MagnifyingGlassIconSolid className="w-5 h-5 mb-1 transition-transform group-active:scale-90" />
+            ) : (
+              <MagnifyingGlassIcon className="w-5 h-5 mb-1 transition-transform group-active:scale-90" />
+            )}
+            <span className="text-[10px] tracking-wider uppercase leading-tight">
+              Search
+            </span>
+          </Link>
+
+          {/* Watchlist */}
+          <Link
+            to="/watchlist"
+            className={`flex flex-col items-center justify-center py-1 transition-colors group cursor-pointer ${
+              location.pathname === "/watchlist"
+                ? "text-red-500 font-bold"
+                : "text-zinc-500 hover:text-zinc-300 font-medium"
+            }`}
+          >
+            {location.pathname === "/watchlist" ? (
+              <BookmarkIconSolid className="w-5 h-5 mb-1 transition-transform group-active:scale-90" />
+            ) : (
+              <BookmarkIcon className="w-5 h-5 mb-1 transition-transform group-active:scale-90" />
+            )}
+            <span className="text-[10px] tracking-wider uppercase leading-tight">
+              Watchlist
+            </span>
+          </Link>
+
+          {/* Seen */}
+          <Link
+            to="/seen"
+            className={`flex flex-col items-center justify-center py-1 transition-colors group cursor-pointer ${
+              location.pathname === "/seen"
+                ? "text-red-500 font-bold"
+                : "text-zinc-500 hover:text-zinc-300 font-medium"
+            }`}
+          >
+            {location.pathname === "/seen" ? (
+              <CheckCircleIconSolid className="w-5 h-5 mb-1 transition-transform group-active:scale-90" />
+            ) : (
+              <CheckCircleIcon className="w-5 h-5 mb-1 transition-transform group-active:scale-90" />
+            )}
+            <span className="text-[10px] tracking-wider uppercase leading-tight">
+              Seen
+            </span>
+          </Link>
+        </div>
+      </nav>
     </div>
   );
 }

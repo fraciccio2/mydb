@@ -9,6 +9,10 @@ export interface Movie {
   imdbID: string | null;
 }
 
+export interface WatchlistItem extends Movie {
+  addedAt?: string;
+}
+
 export interface Rating {
   Source: string;
   Value: string;

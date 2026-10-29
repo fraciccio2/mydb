@@ -4,12 +4,15 @@ import {
   FilmIcon,
   TvIcon,
   QuestionMarkCircleIcon,
+  BookmarkSlashIcon,
 } from "@heroicons/react/24/outline";
 import type { Movie, TVShow } from "../types";
 
 interface MovieCardProps {
   movie: Movie | TVShow;
   isSeenView?: boolean;
+  isWatchlistView?: boolean;
+  onRemoveFromWatchlist?: (imdbID: string) => void;
 }
 
 type SeriesStatusCategory = "ongoing" | "ended" | "other";
@@ -29,7 +32,12 @@ function getSeriesStatusCategory(show: TVShow): SeriesStatusCategory {
   return "other";
 }
 
-function MovieCard({ movie, isSeenView = false }: MovieCardProps) {
+function MovieCard({
+  movie,
+  isSeenView = false,
+  isWatchlistView = false,
+  onRemoveFromWatchlist,
+}: MovieCardProps) {
   const [imgError, setImgError] = useState(false);
   const isPlaceholder = !movie.Poster || movie.Poster === "N/A" || imgError;
 
@@ -98,6 +106,22 @@ function MovieCard({ movie, isSeenView = false }: MovieCardProps) {
 
         {/* Gradient Bottom Overlay */}
         <div className="absolute inset-0 bg-linear-to-t from-zinc-950 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300" />
+
+        {/* Remove from Watchlist Quick Button */}
+        {isWatchlistView && onRemoveFromWatchlist && movie.imdbID && (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              onRemoveFromWatchlist(movie.imdbID!);
+            }}
+            className="absolute top-2 right-2 z-20 bg-zinc-950/80 hover:bg-red-600 text-zinc-300 hover:text-white p-2 rounded-full transition-all shadow-lg backdrop-blur-xs cursor-pointer group/remove"
+            title="Remove from Watchlist"
+          >
+            <BookmarkSlashIcon className="w-4 h-4 transition-transform group-hover/remove:scale-110" />
+          </button>
+        )}
       </div>
 
       {/* Content */}

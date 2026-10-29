@@ -1,4 +1,11 @@
-import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
 import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
 import { db } from "../firebase";
 import MovieCard from "../components/MovieCard";
@@ -30,14 +37,21 @@ function Seen() {
   const setActiveTab = (val: "movies" | "series") => {
     seenStore.setState({ activeTab: val, selectedGenre: "", displayCount: 24 });
   };
-  const setSearchQuery = (val: string) => seenStore.setState({ searchQuery: val });
-  const setSelectedGenre = (val: string) => seenStore.setState({ selectedGenre: val });
-  const setSortConfig = (val: { field: string; direction: "asc" | "desc" }) => seenStore.setState({ sortConfig: val });
-  const setAllMovies = (val: Movie[]) => seenStore.setState({ allMovies: val, hasCachedData: true });
-  const setAllSeries = (val: TVShow[]) => seenStore.setState({ allSeries: val, hasCachedData: true });
+  const setSearchQuery = (val: string) =>
+    seenStore.setState({ searchQuery: val });
+  const setSelectedGenre = (val: string) =>
+    seenStore.setState({ selectedGenre: val });
+  const setSortConfig = (val: { field: string; direction: "asc" | "desc" }) =>
+    seenStore.setState({ sortConfig: val });
+  const setAllMovies = (val: Movie[]) =>
+    seenStore.setState({ allMovies: val, hasCachedData: true });
+  const setAllSeries = (val: TVShow[]) =>
+    seenStore.setState({ allSeries: val, hasCachedData: true });
   const setDisplayCount = (val: number | ((prev: number) => number)) => {
     if (typeof val === "function") {
-      seenStore.setState({ displayCount: val(seenStore.getState().displayCount) });
+      seenStore.setState({
+        displayCount: val(seenStore.getState().displayCount),
+      });
     } else {
       seenStore.setState({ displayCount: val });
     }
@@ -50,7 +64,6 @@ function Seen() {
 
   // Fetch all movies from Firestore
   useEffect(() => {
-
     if (!user) return;
     const q = query(
       collection(db, "users", user.uid, "movies"),
@@ -79,7 +92,6 @@ function Seen() {
 
   // Fetch all series from Firestore
   useEffect(() => {
-
     if (!user) return;
     const q = query(
       collection(db, "users", user.uid, "tvshows"),
@@ -110,7 +122,6 @@ function Seen() {
 
   // Save scroll position when unmounting
   useEffect(() => {
-
     return () => {
       seenStore.setState({ scrollY: window.scrollY });
     };
@@ -179,9 +190,12 @@ function Seen() {
 
   // Restore scroll position when cached/loaded items are rendered
   useEffect(() => {
-
     const cachedState = seenStore.getState();
-    if (cachedState.hasCachedData && cachedState.scrollY > 0 && visibleItems.length > 0) {
+    if (
+      cachedState.hasCachedData &&
+      cachedState.scrollY > 0 &&
+      visibleItems.length > 0
+    ) {
       const timer = setTimeout(() => {
         window.scrollTo(0, cachedState.scrollY);
       }, 100);
@@ -222,7 +236,7 @@ function Seen() {
       </header>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
         <div className="bg-zinc-900/50 border border-zinc-800 p-6 rounded-xl relative overflow-hidden group">
           <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:scale-110 transition-transform">
             <TvIcon className="w-16 h-16 text-red-600" />

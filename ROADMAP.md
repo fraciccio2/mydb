@@ -10,8 +10,7 @@ Questo documento traccia le funzionalità pianificate per l'applicazione **MYDB*
 | :--- | :--- | :--- | :---: |
 | **P1** | **Fondamenta & Sicurezza** | Pulizia Tecnica (Variabili d'ambiente `.env`) | ✅ Completato |
 | **P1** | **Fondamenta & Sicurezza** | Autenticazione Utente (Firebase Auth) | ✅ Completato |
-| **P2** | **Core Tracking** | Watchlist ("Da Vedere") | ⏳ Pianificato |
-| **P2** | **Core Tracking** | "Prossimo Episodio" / Continua a Guardare | ⏳ Pianificato |
+| **P2** | **Core Tracking** | Watchlist ("Da Vedere") | ✅ Completato |
 | **P2** | **Mobile Experience** | Offline Caching & PWA completa | ✅ Completato |
 | **P3** | **Discovery & Filtri** | Sezione Trending & Novità in Home | ✅ Completato |
 | **P3** | **Discovery & Filtri** | Filtro per Piattaforme Streaming (Netflix, Prime, ecc.) | ✅ Completato |
@@ -56,21 +55,14 @@ Questo documento traccia le funzionalità pianificate per l'applicazione **MYDB*
 ### 🟠 PRIORITÀ 2 — Core Tracking & Esperienza Mobile
 
 #### 3. Watchlist ("Da Vedere" / "Watch Later")
-- [ ] Nuova route e pagina `/watchlist` con interfaccia coerente a `Seen.tsx` (filtri per Genere, Ricerca, Tipo Film/Serie).
-- [ ] Nuova collezione Firestore `watchlist`.
-- [ ] Tasti di azione rapida per aggiungere/rimuovere dalla Watchlist:
+- [x] Nuova route e pagina `/watchlist` con interfaccia coerente a `Seen.tsx` (filtri per Genere, Ricerca, Tipo Film/Serie).
+- [x] Nuova collezione Firestore `users/{uid}/watchlist/{imdbID}`.
+- [x] Tasti di azione rapida per aggiungere/rimuovere dalla Watchlist:
   - Pulsante dedicato nella pagina di dettaglio `Details.tsx`.
-  - Icona/segnalibro rapido sulle schede `MovieCard.tsx`.
-- [ ] Transizione automatica: quando un film o episodio in watchlist viene segnato come visto, opzione per rimuoverlo automaticamente dalla Watchlist.
+  - Icona rapida di rimozione sulle schede `MovieCard.tsx`.
+- [x] Transizione automatica: quando un film o una serie TV in watchlist viene segnato come visto in `Details.tsx`, viene automaticamente rimosso dalla Watchlist.
 
-#### 4. "Prossimo Episodio" / Continua a Guardare (Up Next)
-- [ ] Algoritmo client-side che analizza le serie TV in corso con episodi parzialmente visti:
-  - Identifica la prima combinazione `(stagione, episodio)` successiva all'ultimo visto.
-- [ ] Widget / Carousel "Continua a guardare" posizionato in cima alla Home o nella pagina History:
-  - Mostra locandina, nome serie, stagione/episodio (es. *S03E05 - Nome Episodio*).
-  - Tasto rapido *"Visto"* con un solo clic senza dover entrare nel dettaglio della serie.
-
-#### 5. Offline Caching & PWA Completa
+#### 4. Offline Caching & PWA Completa
 - [x] Perfezionare la configurazione di `vite-plugin-pwa` in `vite.config.ts`:
   - Cache dei metadati statici, icone e font.
   - Abilitazione della persistenza offline di Firestore (`initializeFirestore` con `persistentLocalCache` multi-tab IndexedDB).
