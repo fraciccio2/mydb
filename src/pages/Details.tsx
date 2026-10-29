@@ -18,10 +18,12 @@ import {
   UserIcon,
   PlusCircleIcon,
   CheckCircleIcon,
+  BookmarkIcon,
 } from "@heroicons/react/24/outline";
 import {
   StarIcon as StarIconSolid,
   CheckCircleIcon as CheckCircleIconSolid,
+  BookmarkIcon as BookmarkIconSolid,
 } from "@heroicons/react/24/solid";
 import type {
   HybridMovieDetails,
@@ -32,6 +34,7 @@ import type {
   TVShow,
   WatchedEpisodeInfo,
   SeriesEpisode,
+  WatchlistItem,
 } from "../types";
 
 function Details() {
@@ -43,10 +46,12 @@ function Details() {
   const [error, setError] = useState("");
   const [imgError, setImgError] = useState(false);
   const [isSeen, setIsSeen] = useState(false);
+  const [isInWatchlist, setIsInWatchlist] = useState(false);
   const [watchedEpisodes, setWatchedEpisodes] = useState<
     Record<string, WatchedEpisodeInfo>
   >({});
   const [toggling, setToggling] = useState(false);
+  const [watchlistToggling, setWatchlistToggling] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
@@ -61,16 +66,18 @@ function Details() {
       setImgError(false);
       setWatchedEpisodes({});
       setIsSeen(false);
+      setIsInWatchlist(false);
 
       try {
         const apiKeyOMDB = config.omdbApiKey;
         const apiKeyWhatsON = config.whatsonApiKey;
 
-        // Check if seen in Firestore
+        // Check if seen or in watchlist in Firestore
         const docRef = user ? doc(db, "users", user.uid, "movies", id) : null;
         const tvDocRef = user ? doc(db, "users", user.uid, "tvshows", id) : null;
+        const watchlistDocRef = user ? doc(db, "users", user.uid, "watchlist", id) : null;
 
-        const [omdbRes, whatsonRes, seenDoc, seenTvDoc] = await Promise.all([
+        const [omdbRes, whatsonRes, seenDoc, seenTvDoc, watchlistDoc] = await Promise.all([
           fetch(
             `https://www.omdbapi.com/?apikey=${apiKeyOMDB}&i=${id}&plot=full`,
             { signal: controller.signal },
@@ -81,10 +88,15 @@ function Details() {
           ),
           docRef ? getDoc(docRef) : Promise.resolve(null),
           tvDocRef ? getDoc(tvDocRef) : Promise.resolve(null),
+          watchlistDocRef ? getDoc(watchlistDocRef) : Promise.resolve(null),
         ]);
 
         if (seenDoc && seenDoc.exists()) {
           setIsSeen(true);
+        }
+
+        if (watchlistDoc && watchlistDoc.exists()) {
+          setIsInWatchlist(true);
         }
 
         if (seenTvDoc && seenTvDoc.exists()) {
@@ -303,11 +315,52 @@ function Details() {
         };
         await setDoc(docRef, movieToSave);
         setIsSeen(true);
+
+        // Auto-remove from Watchlist if it was present
+        if (isInWatchlist) {
+          const watchlistDocRef = doc(db, "users", user.uid, "watchlist", id);
+          deleteDoc(watchlistDocRef).catch(console.error);
+          setIsInWatchlist(false);
+        }
       }
     } catch (err) {
       console.error("Error toggling movie seen status:", err);
     } finally {
       setToggling(false);
+    }
+  };
+
+  const handleToggleWatchlist = async () => {
+    if (!movie || !id || watchlistToggling || !user) return;
+    setWatchlistToggling(true);
+
+    try {
+      const watchlistDocRef = doc(db, "users", user.uid, "watchlist", id);
+
+      if (isInWatchlist) {
+        await deleteDoc(watchlistDocRef);
+        setIsInWatchlist(false);
+      } else {
+        const itemToSave: WatchlistItem = {
+          imdbID: id,
+          Title: movie.Title,
+          Poster: movie.Poster,
+          Type: movie.Type,
+          Year: movie.Year.includes("-") ? movie.Year : movie.Year + "-01-01",
+          Runtime:
+            typeof movie.Runtime === "string"
+              ? fromMinStringToSecond(movie.Runtime)
+              : movie.Runtime,
+          Genres: movie.Genre ? movie.Genre.split(", ") : [],
+          addedAt: new Date().toISOString(),
+        };
+        await setDoc(watchlistDocRef, itemToSave);
+        setIsInWatchlist(true);
+      }
+    } catch (err) {
+      console.error("Error toggling watchlist status:", err);
+    } finally {
+      setWatchlistToggling(false);
     }
   };
 
@@ -323,6 +376,13 @@ function Details() {
       setIsSeen(false);
       setWatchedEpisodes({});
       return;
+    }
+
+    // Auto-remove from Watchlist when watching episodes of a series
+    if (isInWatchlist) {
+      const watchlistDocRef = doc(db, "users", user.uid, "watchlist", id);
+      deleteDoc(watchlistDocRef).catch(console.error);
+      setIsInWatchlist(false);
     }
 
     const eps = movie.episodes || [];
@@ -712,6 +772,47 @@ function Details() {
               })()}
             </div>
           )}
+
+          {/* Watchlist Toggle Button */}
+          <button
+            type="button"
+            onClick={handleToggleWatchlist}
+            disabled={watchlistToggling}
+            className={`w-full py-3.5 rounded-lg font-black uppercase tracking-widest text-xs flex items-center justify-center gap-2.5 transition-all active:scale-95 cursor-pointer ${
+              isInWatchlist
+                ? "bg-amber-500/15 text-amber-400 border border-amber-500/30 hover:bg-amber-500/25 shadow-lg shadow-amber-500/10"
+                : "bg-zinc-900/80 text-zinc-300 border border-zinc-800 hover:border-zinc-700 hover:text-white"
+            }`}
+          >
+            {watchlistToggling ? (
+              <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                  fill="none"
+                />
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                />
+              </svg>
+            ) : isInWatchlist ? (
+              <>
+                <BookmarkIconSolid className="w-4 h-4 text-amber-400" />
+                <span>In Watchlist</span>
+              </>
+            ) : (
+              <>
+                <BookmarkIcon className="w-4 h-4" />
+                <span>Add to Watchlist</span>
+              </>
+            )}
+          </button>
 
           {/* Quick Stats */}
           <div className="grid grid-cols-2 gap-4">
