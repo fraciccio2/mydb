@@ -10,9 +10,15 @@ import {
   MagnifyingGlassIcon,
   ChevronDownIcon,
   FilmIcon,
+  TvIcon,
   XMarkIcon,
+  AdjustmentsHorizontalIcon,
 } from "@heroicons/react/24/outline";
-import type { MovieType, Movie, OmdbSearchResponse } from "../types";
+import type {
+  MovieType,
+  Movie,
+  OmdbSearchResponse,
+} from "../types";
 import MovieCard from "../components/MovieCard";
 import { searchStore } from "../store/searchStore";
 import { config } from "../config";
@@ -23,6 +29,7 @@ function Search() {
     title,
     type,
     genres,
+    platform,
     movies,
     totalResults,
     page,
@@ -37,6 +44,7 @@ function Search() {
   const setTitle = (val: string) => searchStore.setState({ title: val });
   const setType = (val: MovieType) => searchStore.setState({ type: val });
   const setGenres = (val: string) => searchStore.setState({ genres: val });
+  const setPlatform = (val: string) => searchStore.setState({ platform: val });
   const setMovies = (val: Movie[] | ((prev: Movie[]) => Movie[])) => {
     if (typeof val === "function") {
       searchStore.setState({ movies: val(searchStore.getState().movies) });
@@ -56,11 +64,37 @@ function Search() {
   const [hasSearched, setHasSearched] = useState(
     Boolean(hasCachedData && movies.length > 0),
   );
+  const [isScrolledPastForm, setIsScrolledPastForm] = useState(false);
 
+  const formRef = useRef<HTMLFormElement>(null);
   const observer = useRef<IntersectionObserver | null>(null);
 
+  // IntersectionObserver to detect when the search form is scrolled out of view
+  useEffect(() => {
+    const target = formRef.current;
+    if (!target) return;
+
+    const formObserver = new IntersectionObserver(
+      ([entry]) => {
+        setIsScrolledPastForm(!entry.isIntersecting && entry.boundingClientRect.top < 80);
+      },
+      {
+        threshold: 0,
+        rootMargin: "-80px 0px 0px 0px", // 80px accounts for 64px header + 16px top margin
+      },
+    );
+
+    formObserver.observe(target);
+    return () => formObserver.disconnect();
+  }, []);
+
   const fetchMovies = useCallback(
-    async (pageNum: number, isNewSearch: boolean, searchTitle?: string) => {
+    async (
+      pageNum: number,
+      isNewSearch: boolean,
+      searchTitle?: string,
+      overrideFilters?: { type?: MovieType; genres?: string; platform?: string },
+    ) => {
       if (isNewSearch) {
         setLoading(true);
         setMovies([]);
@@ -75,6 +109,15 @@ function Search() {
       try {
         const apiKeyOMDB = config.omdbApiKey;
         const currentTitle = searchTitle !== undefined ? searchTitle : title;
+        const currentTypeRaw =
+          overrideFilters?.type !== undefined ? overrideFilters.type : type;
+        const currentGenres =
+          overrideFilters?.genres !== undefined ? overrideFilters.genres : genres;
+        const currentPlatform =
+          overrideFilters?.platform !== undefined
+            ? overrideFilters.platform
+            : platform;
+
         let currentSource = isNewSearch ? "whatson" : source;
 
         if (isNewSearch) {
@@ -84,16 +127,17 @@ function Search() {
         // --- Step 1: Try WhatsON if it's the current source ---
         if (currentSource === "whatson") {
           const currentType =
-            type === "series"
+            currentTypeRaw === "series"
               ? "tvshow"
-              : type === "movie"
+              : currentTypeRaw === "movie"
                 ? "movie"
                 : undefined;
 
           const data = await fetchWhatsOn({
             page: pageNum,
             itemType: currentType,
-            genres: genres || undefined,
+            genres: currentGenres || undefined,
+            platforms: currentPlatform || undefined,
             title: currentTitle || undefined,
           });
 
@@ -122,8 +166,8 @@ function Search() {
             }
             setPage(pageNum);
             return;
-          } else if (isNewSearch && currentTitle) {
-            // Fallback to OMDb if no WhatsOn results and we have a title query
+          } else if (isNewSearch && currentTitle && !currentPlatform) {
+            // Fallback to OMDb if no WhatsOn results and we have a title query (and no platform filter)
             currentSource = "omdb";
             setSource("omdb");
           } else {
@@ -138,7 +182,7 @@ function Search() {
         // --- Step 2: Try OMDb if source is omdb ---
         if (currentSource === "omdb") {
           let omdbUrl = `https://www.omdbapi.com/?apikey=${apiKeyOMDB}&s=${encodeURIComponent(currentTitle)}&page=${pageNum}`;
-          if (type) omdbUrl += `&type=${type}`;
+          if (currentTypeRaw) omdbUrl += `&type=${currentTypeRaw}`;
 
           const response = await fetch(omdbUrl);
           const data: OmdbSearchResponse = await response.json();
@@ -167,7 +211,7 @@ function Search() {
         searchStore.setState({ hasCachedData: true });
       }
     },
-    [title, type, genres, source],
+    [title, type, genres, platform, source],
   );
 
   // If a URL query exists, execute the search immediately
@@ -223,6 +267,7 @@ function Search() {
     setTitle("");
     setType("");
     setGenres("");
+    setPlatform("");
     setMovies([]);
     setTotalResults(0);
     setError("");
@@ -232,6 +277,7 @@ function Search() {
       title: "",
       type: "",
       genres: "",
+      platform: "",
       movies: [],
       totalResults: 0,
       page: 1,
@@ -243,9 +289,62 @@ function Search() {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title.trim() && !type && !genres) return;
+    if (!title.trim() && !type && !genres && !platform) return;
     fetchMovies(1, true).catch((e) => console.error(e));
   };
+
+  const scrollToForm = () => {
+    if (formRef.current) {
+      formRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+      const input = formRef.current.querySelector("input");
+      if (input) {
+        setTimeout(() => input.focus(), 350);
+      }
+    }
+  };
+
+  const handleRemoveFilter = (
+    filterKey: "title" | "type" | "genres" | "platform",
+  ) => {
+    let nextTitle = title;
+    let nextType = type;
+    let nextGenres = genres;
+    let nextPlatform = platform;
+
+    if (filterKey === "title") {
+      nextTitle = "";
+      setTitle("");
+    } else if (filterKey === "type") {
+      nextType = "";
+      setType("");
+    } else if (filterKey === "genres") {
+      nextGenres = "";
+      setGenres("");
+    } else if (filterKey === "platform") {
+      nextPlatform = "";
+      setPlatform("");
+    }
+
+    if (nextTitle.trim() || nextType || nextGenres || nextPlatform) {
+      searchStore.setState({
+        title: nextTitle,
+        type: nextType,
+        genres: nextGenres,
+        platform: nextPlatform,
+      });
+      fetchMovies(1, true, nextTitle, {
+        type: nextType,
+        genres: nextGenres,
+        platform: nextPlatform,
+      }).catch((e) => console.error(e));
+    } else {
+      handleReset();
+    }
+  };
+
+  const hasActiveFilters = Boolean(
+    title.trim() || type || genres || platform,
+  );
 
   return (
     <div className="max-w-7xl mx-auto py-8 px-4 pb-24">
@@ -255,20 +354,21 @@ function Search() {
           Search <span className="text-red-600">Titles</span>
         </h1>
         <p className="text-zinc-400 text-sm">
-          Find movies and TV series by title or filter by category and genre
+          Find movies and TV series by title, or filter by category, genre, and streaming platform
         </p>
       </header>
 
       {/* Filter Form */}
       <form
+        ref={formRef}
         onSubmit={handleSearch}
-        className="bg-zinc-900/90 backdrop-blur-md p-6 sm:p-8 rounded-2xl border border-zinc-800 shadow-2xl mb-12 relative overflow-hidden"
+        className="bg-zinc-900/90 backdrop-blur-md p-6 sm:p-8 rounded-2xl border border-zinc-800 shadow-2xl mb-10 relative overflow-hidden"
       >
         <div className="absolute top-0 left-0 right-0 h-1 bg-red-600" />
 
-        <div className="grid grid-cols-1 md:grid-cols-6 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-4 sm:gap-5">
           {/* Title Input */}
-          <div className="md:col-span-3">
+          <div className="sm:col-span-2 lg:col-span-4">
             <label className="block text-[11px] font-black uppercase tracking-widest text-zinc-400 mb-2">
               Movie / TV Series Title
             </label>
@@ -294,7 +394,7 @@ function Search() {
           </div>
 
           {/* Category Select */}
-          <div className="md:col-span-1">
+          <div className="sm:col-span-1 lg:col-span-2">
             <label className="block text-[11px] font-black uppercase tracking-widest text-zinc-400 mb-2">
               Category
             </label>
@@ -315,7 +415,7 @@ function Search() {
           </div>
 
           {/* Genre Select */}
-          <div className="md:col-span-2">
+          <div className="sm:col-span-1 lg:col-span-3">
             <label className="block text-[11px] font-black uppercase tracking-widest text-zinc-400 mb-2">
               Genre
             </label>
@@ -347,8 +447,32 @@ function Search() {
             </div>
           </div>
 
+          {/* Streaming Platform Select */}
+          <div className="sm:col-span-2 lg:col-span-3">
+            <label className="block text-[11px] font-black uppercase tracking-widest text-zinc-400 mb-2">
+              Streaming Platform
+            </label>
+            <div className="relative group">
+              <select
+                value={platform}
+                onChange={(e) => setPlatform(e.target.value)}
+                className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-3 pr-10 focus:ring-2 focus:ring-red-600 outline-none text-white transition-all appearance-none cursor-pointer text-sm focus:border-transparent [&>option]:bg-zinc-900"
+              >
+                <option value="">All Platforms</option>
+                <option value="Netflix">Netflix</option>
+                <option value="Prime Video">Prime Video</option>
+                <option value="Disney+">Disney+</option>
+                <option value="Paramount+">Paramount+</option>
+                <option value="Apple TV">Apple TV</option>
+              </select>
+              <div className="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-zinc-500">
+                <ChevronDownIcon className="w-4 h-4" />
+              </div>
+            </div>
+          </div>
+
           {/* Action Buttons */}
-          <div className="md:col-span-6 flex flex-col sm:flex-row justify-end gap-3 pt-4 border-t border-zinc-800/80">
+          <div className="sm:col-span-2 lg:col-span-12 flex flex-col sm:flex-row justify-end gap-3 pt-4 border-t border-zinc-800/80">
             <button
               type="button"
               onClick={handleReset}
@@ -391,6 +515,118 @@ function Search() {
           </div>
         </div>
       </form>
+
+      {/* Compact Sticky Chips Bar: visible when scrolled past form with active filters */}
+      {isScrolledPastForm && hasActiveFilters && (
+        <div className="sticky top-20 z-40 bg-zinc-900/95 backdrop-blur-xl border border-zinc-800 rounded-2xl py-2 px-3 sm:px-4 shadow-2xl mb-8 transition-all duration-300">
+          <div className="flex items-center justify-between gap-3">
+            {/* Active Filter Chips Scrollable Track */}
+            <div className="flex items-center gap-2 overflow-x-auto scrollbar-none py-1 min-w-0">
+              <span className="text-[11px] font-black uppercase tracking-wider text-zinc-500 shrink-0 hidden sm:inline mr-1">
+                Active:
+              </span>
+
+              {/* Title Chip */}
+              {title && (
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-zinc-950 border border-zinc-800 text-white shrink-0">
+                  <MagnifyingGlassIcon className="w-3.5 h-3.5 text-red-500" />
+                  <span className="max-w-32 sm:max-w-44 truncate font-medium">"{title}"</span>
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveFilter("title")}
+                    aria-label="Remove title filter"
+                    className="text-zinc-400 hover:text-white p-0.5 rounded-full hover:bg-zinc-800 transition-colors cursor-pointer"
+                  >
+                    <XMarkIcon className="w-3.5 h-3.5" />
+                  </button>
+                </span>
+              )}
+
+              {/* Category Chip */}
+              {type && (
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-zinc-950 border border-zinc-800 text-white shrink-0">
+                  {type === "series" ? (
+                    <TvIcon className="w-3.5 h-3.5 text-red-500" />
+                  ) : (
+                    <FilmIcon className="w-3.5 h-3.5 text-red-500" />
+                  )}
+                  <span>{type === "series" ? "TV Series" : "Movies"}</span>
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveFilter("type")}
+                    aria-label="Remove category filter"
+                    className="text-zinc-400 hover:text-white p-0.5 rounded-full hover:bg-zinc-800 transition-colors cursor-pointer"
+                  >
+                    <XMarkIcon className="w-3.5 h-3.5" />
+                  </button>
+                </span>
+              )}
+
+              {/* Genre Chip */}
+              {genres && (
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-zinc-950 border border-zinc-800 text-white shrink-0">
+                  <span className="text-red-500 font-black">#</span>
+                  <span>{genres}</span>
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveFilter("genres")}
+                    aria-label="Remove genre filter"
+                    className="text-zinc-400 hover:text-white p-0.5 rounded-full hover:bg-zinc-800 transition-colors cursor-pointer"
+                  >
+                    <XMarkIcon className="w-3.5 h-3.5" />
+                  </button>
+                </span>
+              )}
+
+              {/* Platform Chip */}
+              {platform && (
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-red-600/10 border border-red-500/30 text-red-400 shrink-0">
+                  <span className="w-1.5 h-1.5 rounded-full bg-red-500"></span>
+                  <span>{platform}</span>
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveFilter("platform")}
+                    aria-label="Remove platform filter"
+                    className="text-red-400 hover:text-white p-0.5 rounded-full hover:bg-red-500/20 transition-colors cursor-pointer"
+                  >
+                    <XMarkIcon className="w-3.5 h-3.5" />
+                  </button>
+                </span>
+              )}
+
+              {/* Results count in sticky bar */}
+              {totalResults > 0 && (
+                <span className="text-[11px] font-bold text-zinc-500 shrink-0 pl-1">
+                  ({totalResults} {totalResults === 1 ? "result" : "results"})
+                </span>
+              )}
+            </div>
+
+            {/* Actions on the right */}
+            <div className="flex items-center gap-2 shrink-0">
+              <button
+                type="button"
+                onClick={scrollToForm}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-950 hover:bg-zinc-800 text-zinc-200 hover:text-white border border-zinc-800 text-xs font-bold transition-all cursor-pointer"
+              >
+                <AdjustmentsHorizontalIcon className="w-3.5 h-3.5 text-red-500" />
+                <span className="hidden sm:inline">Edit Filters</span>
+                <span className="sm:hidden">Edit</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={handleReset}
+                className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-zinc-400 hover:text-red-400 hover:bg-red-950/20 text-xs font-semibold transition-all cursor-pointer"
+                title="Reset all filters"
+              >
+                <XMarkIcon className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">Reset</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Error display */}
       {error && (
@@ -445,13 +681,11 @@ function Search() {
             </div>
           )}
 
-          {!loadingMore &&
-            movies.length >= totalResults &&
-            totalResults > 0 && (
-              <div className="text-center py-12 text-zinc-600 text-xs font-bold uppercase tracking-widest border-t border-zinc-900 mt-8">
-                End of results
-              </div>
-            )}
+          {!loadingMore && movies.length >= totalResults && totalResults > 0 && (
+            <div className="text-center py-12 text-zinc-600 text-xs font-bold uppercase tracking-widest border-t border-zinc-900 mt-8">
+              End of results
+            </div>
+          )}
         </div>
       )}
 
@@ -461,12 +695,9 @@ function Search() {
           <div className="w-16 h-16 rounded-2xl bg-red-600/10 border border-red-600/20 flex items-center justify-center mx-auto mb-5 text-red-500">
             <MagnifyingGlassIcon className="w-8 h-8" />
           </div>
-          <h2 className="text-lg font-bold text-white mb-2">
-            Start Your Search
-          </h2>
+          <h2 className="text-lg font-bold text-white mb-2">Start Your Search</h2>
           <p className="text-zinc-500 text-xs max-w-sm mx-auto leading-relaxed">
-            Type a title above or select a category and genre to explore the
-            catalog.
+            Type a title above or select a category, genre, and streaming platform to explore the catalog.
           </p>
         </div>
       )}
@@ -477,9 +708,7 @@ function Search() {
           <div className="w-14 h-14 rounded-2xl bg-zinc-800 flex items-center justify-center mx-auto mb-4 text-zinc-500">
             <FilmIcon className="w-7 h-7" />
           </div>
-          <h2 className="text-base font-bold text-white mb-1">
-            No titles found
-          </h2>
+          <h2 className="text-base font-bold text-white mb-1">No titles found</h2>
           <p className="text-zinc-500 text-xs">
             Try adjusting your filters or checking the spelling of the title.
           </p>

@@ -14,7 +14,7 @@ Questo documento traccia le funzionalità pianificate per l'applicazione **MYDB*
 | **P2** | **Core Tracking** | "Prossimo Episodio" / Continua a Guardare | ⏳ Pianificato |
 | **P2** | **Mobile Experience** | Offline Caching & PWA completa | ⏳ Pianificato |
 | **P3** | **Discovery & Filtri** | Sezione Trending & Novità in Home | ✅ Completato |
-| **P3** | **Discovery & Filtri** | Filtro per Piattaforme Streaming (Netflix, Prime, ecc.) | ⏳ Pianificato |
+| **P3** | **Discovery & Filtri** | Filtro per Piattaforme Streaming (Netflix, Prime, ecc.) | ✅ Completato |
 | **P4** | **Analytics & Gamification** | Dashboard Visuale (Grafici & Statistiche avanzate) | ⏳ Pianificato |
 | **P4** | **Analytics & Gamification** | Movie Challenge Annuale (es. "50 film nel 2026") | ⏳ Pianificato |
 | **P4** | **Portabilità** | Import / Export Dati (CSV Letterboxd / JSON backup) | ⏳ Pianificato |
@@ -89,10 +89,10 @@ Questo documento traccia le funzionalità pianificate per l'applicazione **MYDB*
 - [x] Cache dello stato in `homeStore` per caricamento immediato e zero chiamate di rete ridondanti.
 
 #### 7. Filtro per Piattaforme Streaming
-- [ ] Sfruttare i metadati `platforms_links` già forniti dall'API WhatsOn:
-  - Icone e selettore per piattaforme: **Netflix, Prime Video, Disney+, Apple TV+, NOW, Paramount+**.
-- [ ] Filtro rapido nella pagina di ricerca: *"Cosa posso vedere stasera su [Piattaforma]"*.
-- [ ] Badge piattaforma visibile sulle locandine o nei dettagli.
+- [x] Integrazione del parametro nativo platforms dell'API WhatsOn.
+
+- [x] Filtro rapido nella pagina di ricerca: Streaming Platform (Netflix, Prime Video, Disney+, Paramount+, Apple TV).
+- [x] Combinabile liberamente con Titolo, Categoria e Genere.
 
 ---
 

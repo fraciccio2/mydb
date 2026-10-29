@@ -4,6 +4,7 @@ export interface SearchState {
   title: string;
   type: MovieType;
   genres: string;
+  platform: string;
   movies: Movie[];
   totalResults: number;
   page: number;
@@ -18,6 +19,7 @@ const initialState: SearchState = {
   title: "",
   type: "",
   genres: "",
+  platform: "",
   movies: [],
   totalResults: 0,
   page: 1,

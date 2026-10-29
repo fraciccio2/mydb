@@ -5,6 +5,7 @@ export interface WhatsOnFetchOptions {
   page?: number;
   itemType?: "movie" | "tvshow";
   genres?: string;
+  platforms?: string;
   title?: string;
 }
 
@@ -33,7 +34,7 @@ export function normalizeGenre(
 export async function fetchWhatsOn(
   options: WhatsOnFetchOptions = {},
 ): Promise<WhatsOnSearchResponse> {
-  const { page = 1, itemType, genres, title } = options;
+  const { page = 1, itemType, genres, platforms, title } = options;
   const apiKey = config.whatsonApiKey;
   const normalizedGenre = normalizeGenre(genres, itemType);
 
@@ -47,6 +48,9 @@ export async function fetchWhatsOn(
     }
     if (normalizedGenre) {
       url += `&genres=${encodeURIComponent(normalizedGenre)}`;
+    }
+    if (platforms) {
+      url += `&platforms=${encodeURIComponent(platforms)}`;
     }
     if (title) {
       url += `&title=${encodeURIComponent(title)}`;
