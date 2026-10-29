@@ -12,7 +12,7 @@ Questo documento traccia le funzionalità pianificate per l'applicazione **MYDB*
 | **P1** | **Fondamenta & Sicurezza** | Autenticazione Utente (Firebase Auth) | ✅ Completato |
 | **P2** | **Core Tracking** | Watchlist ("Da Vedere") | ⏳ Pianificato |
 | **P2** | **Core Tracking** | "Prossimo Episodio" / Continua a Guardare | ⏳ Pianificato |
-| **P2** | **Mobile Experience** | Offline Caching & PWA completa | ⏳ Pianificato |
+| **P2** | **Mobile Experience** | Offline Caching & PWA completa | ✅ Completato |
 | **P3** | **Discovery & Filtri** | Sezione Trending & Novità in Home | ✅ Completato |
 | **P3** | **Discovery & Filtri** | Filtro per Piattaforme Streaming (Netflix, Prime, ecc.) | ✅ Completato |
 | **P4** | **Analytics & Gamification** | Dashboard Visuale (Grafici & Statistiche avanzate) | ⏳ Pianificato |
@@ -71,10 +71,11 @@ Questo documento traccia le funzionalità pianificate per l'applicazione **MYDB*
   - Tasto rapido *"Visto"* con un solo clic senza dover entrare nel dettaglio della serie.
 
 #### 5. Offline Caching & PWA Completa
-- [ ] Perfezionare la configurazione di `vite-plugin-pwa` in `vite.config.ts`:
+- [x] Perfezionare la configurazione di `vite-plugin-pwa` in `vite.config.ts`:
   - Cache dei metadati statici, icone e font.
-  - Abilitazione della persistenza offline di Firestore (`enableIndexedDbPersistence` o `initializeFirestore` con cache locale).
-- [ ] Notifica / prompt per l'installazione su dispositivi mobili e supporto per consultazione offline dello storico.
+  - Abilitazione della persistenza offline di Firestore (`initializeFirestore` con `persistentLocalCache` multi-tab IndexedDB).
+  - Runtime Caching Workbox per immagini TMDB e OMDb (LRU max 400 voci, scadenza 30gg).
+- [x] PWA standalone manifest, meta-tag iOS per installazione a tutto schermo e banner stato offline.
 
 ---
 

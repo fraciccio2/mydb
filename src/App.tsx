@@ -7,6 +7,7 @@ import Details from "./pages/Details";
 import Login from "./pages/Login";
 import logo from "./assets/logo.svg";
 import { useAuth } from "./context/useAuth";
+import { useOnlineStatus } from "./hooks/useOnlineStatus";
 import {
   ArrowRightStartOnRectangleIcon,
   ChevronDownIcon,
@@ -15,6 +16,7 @@ import {
 function App() {
   const location = useLocation();
   const { user, loading, logout } = useAuth();
+  const isOnline = useOnlineStatus();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -171,6 +173,14 @@ function App() {
           </div>
         </div>
       </nav>
+
+      {/* Offline Status Banner */}
+      {!isOnline && (
+        <div className="bg-amber-500/10 border-b border-amber-500/20 px-4 py-2 text-center text-xs text-amber-300 font-bold flex items-center justify-center gap-2 sticky top-16 z-40 backdrop-blur-md">
+          <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+          <span>You are currently offline. Browsing cached personal library.</span>
+        </div>
+      )}
 
       <main>
         <Routes>
