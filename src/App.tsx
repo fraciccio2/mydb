@@ -7,11 +7,13 @@ import Watchlist from "./pages/Watchlist";
 import Details from "./pages/Details";
 import Login from "./pages/Login";
 import logo from "./assets/logo.svg";
+import DataBackupModal from "./components/DataBackupModal";
 import { useAuth } from "./context/useAuth";
 import { useOnlineStatus } from "./hooks/useOnlineStatus";
 import {
   ArrowRightStartOnRectangleIcon,
   ChevronDownIcon,
+  CircleStackIcon,
   HomeIcon,
   MagnifyingGlassIcon,
   BookmarkIcon,
@@ -29,6 +31,7 @@ function App() {
   const { user, loading, logout } = useAuth();
   const isOnline = useOnlineStatus();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isBackupModalOpen, setIsBackupModalOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
   // Close dropdown on outside click or Escape key
@@ -172,6 +175,19 @@ function App() {
                     </p>
                   </div>
 
+                  {/* Backup & Restore Data Button */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsMenuOpen(false);
+                      setIsBackupModalOpen(true);
+                    }}
+                    className="w-full flex items-center gap-2.5 text-xs font-bold text-zinc-300 hover:text-white hover:bg-zinc-800/80 px-3 py-2.5 rounded-lg transition-colors cursor-pointer mb-1"
+                  >
+                    <CircleStackIcon className="w-4 h-4 text-amber-500" />
+                    <span>Backup & Restore</span>
+                  </button>
+
                   {/* Logout Button */}
                   <button
                     type="button"
@@ -293,6 +309,12 @@ function App() {
           </Link>
         </div>
       </nav>
+
+      {/* Backup & Restore Data Modal */}
+      <DataBackupModal
+        isOpen={isBackupModalOpen}
+        onClose={() => setIsBackupModalOpen(false)}
+      />
     </div>
   );
 }
