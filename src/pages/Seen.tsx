@@ -9,9 +9,12 @@ import {
 import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
 import { db } from "../firebase";
 import MovieCard from "../components/MovieCard";
+import SeenAnalytics from "../components/SeenAnalytics";
 import type { Movie, TVShow } from "../types";
 import {
   ArrowsUpDownIcon,
+  ChartBarIcon,
+  ChevronDownIcon,
   ClockIcon,
   FilmIcon,
   FunnelIcon,
@@ -32,11 +35,14 @@ function Seen() {
     allSeries,
     displayCount,
     hasCachedData,
+    showAnalytics,
   } = useSyncExternalStore(seenStore.subscribe, seenStore.getState);
 
   const setActiveTab = (val: "movies" | "series") => {
     seenStore.setState({ activeTab: val, selectedGenre: "", displayCount: 24 });
   };
+  const setShowAnalytics = (val: boolean) =>
+    seenStore.setState({ showAnalytics: val });
   const setSearchQuery = (val: string) =>
     seenStore.setState({ searchQuery: val });
   const setSelectedGenre = (val: string) =>
@@ -226,14 +232,40 @@ function Seen() {
 
   return (
     <div className="max-w-7xl mx-auto py-12 px-4 pb-24">
-      <header className="mb-12">
-        <h2 className="text-4xl font-black text-white mb-2 tracking-tight uppercase">
-          My <span className="text-red-600">History</span>
-        </h2>
-        <p className="text-zinc-500 font-medium">
-          Tracking your cinematic journey
-        </p>
+      <header className="mb-8 sm:mb-12 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+        <div>
+          <h2 className="text-4xl font-black text-white mb-2 tracking-tight uppercase">
+            My <span className="text-red-600">History</span>
+          </h2>
+          <p className="text-zinc-500 font-medium">
+            Tracking your cinematic journey
+          </p>
+        </div>
+
+        {/* Toggle Analytics Button */}
+        <button
+          type="button"
+          onClick={() => setShowAnalytics(!showAnalytics)}
+          className={`inline-flex items-center gap-2.5 px-5 py-3 rounded-xl font-black text-xs uppercase tracking-wider transition-all duration-200 cursor-pointer self-start sm:self-auto active:scale-95 shadow-lg ${
+            showAnalytics
+              ? "bg-red-600 text-white shadow-red-600/25 hover:bg-red-500"
+              : "bg-zinc-900/90 text-zinc-300 hover:text-white hover:bg-zinc-800 border border-zinc-800/80 hover:border-zinc-700"
+          }`}
+        >
+          <ChartBarIcon className="w-4 h-4 text-current" />
+          <span>{showAnalytics ? "Hide Analytics" : "Show Analytics"}</span>
+          <ChevronDownIcon
+            className={`w-3.5 h-3.5 transition-transform duration-300 ${
+              showAnalytics ? "rotate-180" : ""
+            }`}
+          />
+        </button>
       </header>
+
+      {/* Expandable Analytics Section */}
+      {showAnalytics && (
+        <SeenAnalytics allMovies={allMovies} allSeries={allSeries} />
+      )}
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
