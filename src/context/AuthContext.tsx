@@ -9,16 +9,25 @@ import { auth, googleProvider } from "../firebase";
 import { AuthContext } from "./authContextDef";
 import { seenStore } from "../store/seenStore";
 import { searchStore } from "../store/searchStore";
+import { watchlistStore } from "../store/watchlistStore";
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Clear any leftover impersonate UID if present
+    try {
+      localStorage.removeItem("mydb_impersonate_uid");
+    } catch {
+      // ignore
+    }
+
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       // Clear in-memory cache if user changed
       if (currentUser?.uid !== user?.uid) {
         seenStore.reset();
+        watchlistStore.reset();
       }
       setUser(currentUser);
       setLoading(false);
@@ -40,6 +49,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       await signOut(auth);
       seenStore.reset();
+      watchlistStore.reset();
       searchStore.reset();
     } catch (error) {
       console.error("Error signing out:", error);

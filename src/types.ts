@@ -13,6 +13,20 @@ export interface WatchlistItem extends Movie {
   addedAt?: string;
 }
 
+export interface MydbBackupData {
+  version: number;
+  exportedAt: string;
+  userEmail?: string;
+  stats?: {
+    moviesCount: number;
+    tvshowsCount: number;
+    watchlistCount: number;
+  };
+  movies: Movie[];
+  tvshows: TVShow[];
+  watchlist: WatchlistItem[];
+}
+
 export interface Rating {
   Source: string;
   Value: string;

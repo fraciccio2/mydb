@@ -15,8 +15,7 @@ Questo documento traccia le funzionalità pianificate per l'applicazione **MYDB*
 | **P3** | **Discovery & Filtri** | Sezione Trending & Novità in Home | ✅ Completato |
 | **P3** | **Discovery & Filtri** | Filtro per Piattaforme Streaming (Netflix, Prime, ecc.) | ✅ Completato |
 | **P4** | **Analytics & Gamification** | Dashboard Visuale (Grafici & Statistiche avanzate) | ✅ Completato |
-| **P4** | **Analytics & Gamification** | Movie Challenge Annuale (es. "50 film nel 2026") | ⏳ Pianificato |
-| **P4** | **Portabilità** | Import / Export Dati (CSV Letterboxd / JSON backup) | ⏳ Pianificato |
+| **P4** | **Portabilità** | Import / Export Dati (CSV Letterboxd / JSON backup) | ✅ Completato |
 | **P5** | **Extra / Da valutare** | Valutazione Utente (Rating personale 1-10 & Note) | ⏳ Bassa priorità |
 
 ---
@@ -100,17 +99,15 @@ Questo documento traccia le funzionalità pianificate per l'applicazione **MYDB*
   - Statistiche e record personali (film più lungo, durata media, stato serie).
 - [x] Implementazione nativa in React + Tailwind CSS senza librerie esterne per massima velocità PWA.
 
-#### 9. Movie Challenge Annuale (es. "50 Film nel 2026")
-- [ ] Impostazione di un obiettivo annuo personalizzato (es. 52 film/anno).
-- [ ] Barra di progresso dinamica calcolata sui film visti nell'anno solare in corso (`WatchedAt`).
-- [ ] Statistiche di passo (*"Sei in pari con l'obiettivo: +2 film rispetto alla media settimanale"*).
-- [ ] Recap di fine anno (stile *Wrapped*) condivisibile.
-
-#### 10. Import / Export Dati
-- [ ] Esportazione completa dello storico e della watchlist in formato JSON (backup locale).
-- [ ] Importatore CSV compatibile con il formato di esportazione di **Letterboxd** e **IMDb**:
-  - Mappatura automatica tramite titolo e anno o IMDb ID.
-  - Importazione massiva nello storage Firebase dell'utente.
+#### 9. Import / Export Dati
+- [x] Esportazione completa dello storico e della watchlist in formato JSON (backup locale scaricabile istantaneamente).
+- [x] Ripristino e importazione massiva da file JSON con modalità Merge, anteprima conteggi e batch Firestore (chunk da 400).
+- [x] Importatore CSV compatibile con il formato di esportazione di **Letterboxd** e **IMDb**:
+  - Riconoscimento automatico delle colonne (Letterboxd: `Name`, `Year`, `Date`; IMDb: `Const`, `Title`, `Year`, `Genres`, `Runtime (mins)`).
+  - Selezione destinazione di import (Visti o Da Vedere / Watchlist).
+  - Rilevamento duplicati automatico con opzione per saltare elementi già presenti.
+  - Arricchimento intelligente metadati via OMDb e WhatsOn (Poster, Genere, Durata) con gestione concorrenza a blocchi per prevenire rate limit 429.
+  - Scrittura massiva con batch Firestore, barra di avanzamento in tempo reale, opzione di annullamento e report finale dettagliato.
 
 ---
 
