@@ -14,7 +14,7 @@ Questo documento traccia le funzionalità pianificate per l'applicazione **MYDB*
 | **P2** | **Mobile Experience** | Offline Caching & PWA completa | ✅ Completato |
 | **P3** | **Discovery & Filtri** | Sezione Trending & Novità in Home | ✅ Completato |
 | **P3** | **Discovery & Filtri** | Filtro per Piattaforme Streaming (Netflix, Prime, ecc.) | ✅ Completato |
-| **P4** | **Analytics & Gamification** | Dashboard Visuale (Grafici & Statistiche avanzate) | ⏳ Pianificato |
+| **P4** | **Analytics & Gamification** | Dashboard Visuale (Grafici & Statistiche avanzate) | ✅ Completato |
 | **P4** | **Analytics & Gamification** | Movie Challenge Annuale (es. "50 film nel 2026") | ⏳ Pianificato |
 | **P4** | **Portabilità** | Import / Export Dati (CSV Letterboxd / JSON backup) | ⏳ Pianificato |
 | **P5** | **Extra / Da valutare** | Valutazione Utente (Rating personale 1-10 & Note) | ⏳ Bassa priorità |
@@ -92,11 +92,13 @@ Questo documento traccia le funzionalità pianificate per l'applicazione **MYDB*
 ### 🟢 PRIORITÀ 4 — Analytics, Gamification & Portabilità
 
 #### 8. Dashboard Visuale (Grafici & Statistiche Avanzate)
-- [ ] Espansione del pannello statistiche di `Seen.tsx`:
-  - Grafico distribuzione per generi (es. 40% Sci-Fi, 30% Dramma...).
-  - Top 5 registi e attori più visti.
-  - Grafico temporale: andamento delle visioni mese per mese / anno per anno.
-- [ ] Integrazione di una libreria leggera di grafici (o componenti SVG/Tailwind nativi).
+- [x] Pannello analitico espandibile in `Seen.tsx`:
+  - Grafico mensile interattivo con visualizzazione ritmo e tempo speso.
+  - Selettore anno e pill di filtro per ambito (All / Movies / Series).
+  - Barra continua proporzionale per generi con percentuali e legenda.
+  - Distribuzione epoche e decenni di rilascio (< 1980 fino al 2020+).
+  - Statistiche e record personali (film più lungo, durata media, stato serie).
+- [x] Implementazione nativa in React + Tailwind CSS senza librerie esterne per massima velocità PWA.
 
 #### 9. Movie Challenge Annuale (es. "50 Film nel 2026")
 - [ ] Impostazione di un obiettivo annuo personalizzato (es. 52 film/anno).

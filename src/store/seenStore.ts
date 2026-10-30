@@ -13,6 +13,7 @@ export interface SeenState {
   displayCount: number;
   scrollY: number;
   hasCachedData: boolean;
+  showAnalytics: boolean;
 }
 
 const initialState: SeenState = {
@@ -28,6 +29,7 @@ const initialState: SeenState = {
   displayCount: 12,
   scrollY: 0,
   hasCachedData: false,
+  showAnalytics: false,
 };
 
 let currentState: SeenState = { ...initialState };
