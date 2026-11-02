@@ -83,7 +83,7 @@ function Details() {
             { signal: controller.signal },
           ),
           fetch(
-            `https://whatson-api.onrender.com/?imdbId=${id}&api_key=${apiKeyWhatsON}&append_to_response=platforms_links,episodes_details,original_title`,
+            `https://whatson-api.onrender.com/?imdbId=${id}&api_key=${apiKeyWhatsON}&append_to_response=platforms_links,episodes_details,original_title&episodes_append_to_response=title,description,url,release_date`,
             { signal: controller.signal },
           ),
           docRef ? getDoc(docRef) : Promise.resolve(null),
