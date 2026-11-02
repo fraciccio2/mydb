@@ -127,10 +127,10 @@ function Details() {
           allEpisodes = whatsonItem.episodes_details.map((ep) => ({
             season: ep.season,
             episode: ep.episode,
-            title: ep.title,
-            description: ep.description,
-            id: ep.id,
-            release_date: ep.release_date,
+            title: ep.title || `Episode ${ep.episode}`,
+            description: ep.description || "",
+            id: ep.id || `${ep.season}_${ep.episode}`,
+            release_date: ep.release_date || "",
             users_rating: ep.users_rating,
             users_rating_count: ep.users_rating_count,
             url: ep.url,
@@ -171,7 +171,7 @@ function Details() {
                     allEpisodes.push({
                       season: sNum,
                       episode: parseInt(ep.Episode, 10) || 0,
-                      title: ep.Title,
+                      title: ep.Title || `Episode ${ep.Episode}`,
                       id: ep.imdbID,
                       release_date: ep.Released,
                       users_rating:
@@ -302,14 +302,18 @@ function Details() {
       } else {
         const movieToSave: Movie = {
           imdbID: id,
-          Title: movie.Title,
-          Poster: movie.Poster,
-          Type: movie.Type,
-          Year: movie.Year.includes("-") ? movie.Year : movie.Year + "-01-01",
+          Title: movie.Title || "Unknown",
+          Poster: movie.Poster || null,
+          Type: movie.Type || "movie",
+          Year: movie.Year
+            ? movie.Year.includes("-")
+              ? movie.Year
+              : movie.Year + "-01-01"
+            : new Date().getFullYear() + "-01-01",
           Runtime:
             typeof movie.Runtime === "string"
               ? fromMinStringToSecond(movie.Runtime)
-              : movie.Runtime,
+              : movie.Runtime || 0,
           Genres: movie.Genre ? movie.Genre.split(", ") : [],
           WatchedAt: new Date().toISOString(),
         };
@@ -343,14 +347,18 @@ function Details() {
       } else {
         const itemToSave: WatchlistItem = {
           imdbID: id,
-          Title: movie.Title,
-          Poster: movie.Poster,
-          Type: movie.Type,
-          Year: movie.Year.includes("-") ? movie.Year : movie.Year + "-01-01",
+          Title: movie.Title || "Unknown",
+          Poster: movie.Poster || null,
+          Type: movie.Type || "movie",
+          Year: movie.Year
+            ? movie.Year.includes("-")
+              ? movie.Year
+              : movie.Year + "-01-01"
+            : new Date().getFullYear() + "-01-01",
           Runtime:
             typeof movie.Runtime === "string"
               ? fromMinStringToSecond(movie.Runtime)
-              : movie.Runtime,
+              : movie.Runtime || 0,
           Genres: movie.Genre ? movie.Genre.split(", ") : [],
           addedAt: new Date().toISOString(),
         };
@@ -444,28 +452,43 @@ function Details() {
 
     const seriesStatus = getResolvedStatus();
 
+    // Sanitize watchedEpisodes so no undefined values are sent to Firestore
+    const sanitizedEpisodes: Record<string, WatchedEpisodeInfo> = {};
+    for (const [epKey, epInfo] of Object.entries(updatedEpisodes)) {
+      sanitizedEpisodes[epKey] = {
+        season: epInfo.season ?? 1,
+        episode: epInfo.episode ?? 1,
+        watchedAt: epInfo.watchedAt || new Date().toISOString(),
+        title: epInfo.title || `Episode ${epInfo.episode ?? 1}`,
+      };
+    }
+
     const tvShowToSave: TVShow = {
       imdbID: id,
-      Title: movie.Title,
-      Poster: movie.Poster,
+      Title: movie.Title || "Unknown Series",
+      Poster: movie.Poster || null,
       Type: "series",
-      Year: movie.Year.includes("-") ? movie.Year : movie.Year + "-01-01",
+      Year: movie.Year
+        ? movie.Year.includes("-")
+          ? movie.Year
+          : movie.Year + "-01-01"
+        : new Date().getFullYear() + "-01-01",
       Runtime:
         typeof movie.Runtime === "string"
           ? fromMinStringToSecond(movie.Runtime)
-          : movie.Runtime,
+          : movie.Runtime || 0,
       Genres: movie.Genre ? movie.Genre.split(", ") : [],
       WatchedAt: new Date().toISOString(),
-      totalSeasons: seasonsCount,
-      totalEpisodes: totalEpisodesCount,
-      watchedEpisodes: updatedEpisodes,
-      watchedEpisodesCount: watchedKeys.length,
+      totalSeasons: seasonsCount || 1,
+      totalEpisodes: totalEpisodesCount || 0,
+      watchedEpisodes: sanitizedEpisodes,
+      watchedEpisodesCount: Object.keys(sanitizedEpisodes).length,
       watchedSeasons,
-      status: seriesStatus,
+      status: seriesStatus || "Unknown",
     };
 
     await setDoc(tvDocRef, tvShowToSave);
-    setWatchedEpisodes(updatedEpisodes);
+    setWatchedEpisodes(sanitizedEpisodes);
     setIsSeen(true);
   };
 
@@ -480,7 +503,7 @@ function Details() {
       next[key] = {
         season: ep.season,
         episode: ep.episode,
-        title: ep.title,
+        title: ep.title || `Episode ${ep.episode}`,
         watchedAt: new Date().toISOString(),
       };
     }
@@ -515,7 +538,7 @@ function Details() {
           next[key] = {
             season: ep.season,
             episode: ep.episode,
-            title: ep.title,
+            title: ep.title || `Episode ${ep.episode}`,
             watchedAt: now,
           };
         }
@@ -551,7 +574,7 @@ function Details() {
             next[`${ep.season}_${ep.episode}`] = {
               season: ep.season,
               episode: ep.episode,
-              title: ep.title,
+              title: ep.title || `Episode ${ep.episode}`,
               watchedAt: now,
             };
           });
