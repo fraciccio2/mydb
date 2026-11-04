@@ -74,22 +74,27 @@ function Details() {
 
         // Check if seen or in watchlist in Firestore
         const docRef = user ? doc(db, "users", user.uid, "movies", id) : null;
-        const tvDocRef = user ? doc(db, "users", user.uid, "tvshows", id) : null;
-        const watchlistDocRef = user ? doc(db, "users", user.uid, "watchlist", id) : null;
+        const tvDocRef = user
+          ? doc(db, "users", user.uid, "tvshows", id)
+          : null;
+        const watchlistDocRef = user
+          ? doc(db, "users", user.uid, "watchlist", id)
+          : null;
 
-        const [omdbRes, whatsonRes, seenDoc, seenTvDoc, watchlistDoc] = await Promise.all([
-          fetch(
-            `https://www.omdbapi.com/?apikey=${apiKeyOMDB}&i=${id}&plot=full`,
-            { signal: controller.signal },
-          ),
-          fetch(
-            `https://whatson-api.onrender.com/?imdbId=${id}&api_key=${apiKeyWhatsON}&append_to_response=platforms_links,episodes_details,original_title&episodes_append_to_response=title,description,url,release_date`,
-            { signal: controller.signal },
-          ),
-          docRef ? getDoc(docRef) : Promise.resolve(null),
-          tvDocRef ? getDoc(tvDocRef) : Promise.resolve(null),
-          watchlistDocRef ? getDoc(watchlistDocRef) : Promise.resolve(null),
-        ]);
+        const [omdbRes, whatsonRes, seenDoc, seenTvDoc, watchlistDoc] =
+          await Promise.all([
+            fetch(
+              `https://www.omdbapi.com/?apikey=${apiKeyOMDB}&i=${id}&plot=full`,
+              { signal: controller.signal },
+            ),
+            fetch(
+              `https://whatson-api.onrender.com/?imdbId=${id}&api_key=${apiKeyWhatsON}&append_to_response=platforms_links,episodes_details,original_title&episodes_append_to_response=title,description,url,release_date`,
+              { signal: controller.signal },
+            ),
+            docRef ? getDoc(docRef) : Promise.resolve(null),
+            tvDocRef ? getDoc(tvDocRef) : Promise.resolve(null),
+            watchlistDocRef ? getDoc(watchlistDocRef) : Promise.resolve(null),
+          ]);
 
         if (seenDoc && seenDoc.exists()) {
           setIsSeen(true);
@@ -203,15 +208,19 @@ function Details() {
                 omdbData?.Title ||
                 "N/A",
               Year:
-                (whatsonItem.release_date
-                  ? whatsonItem.release_date.split("-")[0]
-                  : omdbData?.Year) || "N/A",
+                (omdbData?.Year
+                  ? omdbData?.Year
+                  : whatsonItem.release_date
+                    ? whatsonItem.release_date.split("-")[0]
+                    : "") || "N/A",
               Rated: omdbData?.Rated || "N/A",
-              Released: whatsonItem.release_date || omdbData?.Released || "N/A",
+              Released: omdbData?.Released || whatsonItem.release_date || "N/A",
               Runtime:
-                (whatsonItem.runtime
-                  ? `${whatsonItem.runtime / 60} min`
-                  : omdbData?.Runtime) || "N/A",
+                (omdbData?.Runtime
+                  ? omdbData?.Runtime
+                  : whatsonItem.runtime
+                    ? `${whatsonItem.runtime / 60} min`
+                    : "") || "N/A",
               Genre: omdbData?.Genre || "N/A",
               Director: omdbData?.Director || "N/A",
               Writer: omdbData?.Writer || "N/A",
@@ -224,13 +233,17 @@ function Details() {
               Ratings: omdbData?.Ratings || [],
               Metascore: omdbData?.Metascore || "N/A",
               imdbRating:
-                (whatsonItem.imdb?.users_rating
-                  ? whatsonItem.imdb.users_rating.toString()
-                  : omdbData?.imdbRating) || "N/A",
+                (omdbData?.imdbRating
+                  ? omdbData?.imdbRating
+                  : whatsonItem.imdb?.users_rating
+                    ? whatsonItem.imdb.users_rating.toString()
+                    : "") || "N/A",
               imdbVotes:
-                (whatsonItem.imdb?.users_rating
-                  ? whatsonItem.imdb.users_rating.toString()
-                  : omdbData?.imdbVotes) || "N/A",
+                (omdbData?.imdbVotes
+                  ? omdbData?.imdbVotes
+                  : whatsonItem.imdb?.users_rating
+                    ? whatsonItem.imdb.users_rating.toString()
+                    : "") || "N/A",
               imdbID: id,
               Type:
                 (whatsonItem.item_type === "tvshow"
